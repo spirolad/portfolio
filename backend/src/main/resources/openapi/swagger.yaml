@@ -1,0 +1,866 @@
+openapi: 3.1.0
+info:
+  title: Portfolio API
+  description: API for managing portfolio resources
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: Education
+    description: Operations related to education records
+  - name: Experience
+    description: Operations related to experience records
+  - name: Project
+    description: Operations related to project records
+  - name: Skill
+    description: Operations related to skill and category records
+  - name: Portfolio
+    description: Operations related to the portfolio aggregate and profile
+paths:
+  /educations:
+    get:
+      tags:
+        - Education
+      description: Retrieve education records
+      operationId: getEducations
+      security: []
+      responses:
+        "200":
+          description: A list of education records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EducationResponse"
+    post:
+      tags:
+        - Education
+      description: Create a new education record
+      operationId: createEducation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationRequest"
+      responses:
+        "201":
+          description: Education record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EducationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /educations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdParam"
+    get:
+      tags:
+        - Education
+      description: Retrieve an education record by id
+      operationId: getEducationById
+      security: []
+      responses:
+        "200":
+          description: Education record found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EducationResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Education
+      description: Update an existing education record
+      operationId: updateEducation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationRequest"
+      responses:
+        "200":
+          description: Education record updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EducationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Education
+      description: Delete an education record
+      operationId: deleteEducation
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Education record deleted successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /experiences:
+    get:
+      tags:
+        - Experience
+      description: Retrieve experience records
+      operationId: getExperiences
+      security: []
+      responses:
+        "200":
+          description: A list of experience records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExperienceResponse"
+    post:
+      tags:
+        - Experience
+      description: Create a new experience record
+      operationId: createExperience
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceRequest"
+      responses:
+        "201":
+          description: Experience record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperienceResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /experiences/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdParam"
+    get:
+      tags:
+        - Experience
+      description: Retrieve an experience record by id
+      operationId: getExperienceById
+      security: []
+      responses:
+        "200":
+          description: Experience record found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperienceResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Experience
+      description: Update an existing experience record
+      operationId: updateExperience
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceRequest"
+      responses:
+        "200":
+          description: Experience record updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperienceResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Experience
+      description: Delete an experience record
+      operationId: deleteExperience
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Experience record deleted successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /projects:
+    get:
+      tags:
+        - Project
+      description: Retrieve project records
+      operationId: getProjects
+      security: []
+      responses:
+        "200":
+          description: A list of project records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectResponse"
+    post:
+      tags:
+        - Project
+      description: Create a project with local screenshots upload
+      operationId: createProject
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProjectUploadRequest"
+      responses:
+        "201":
+          description: Project record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /projects/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdParam"
+    get:
+      tags:
+        - Project
+      description: Retrieve a project record by id
+      operationId: getProjectById
+      security: []
+      responses:
+        "200":
+          description: Project record found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Project
+      description: Update an existing project record
+      operationId: updateProject
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProjectUploadRequest"
+      responses:
+        "200":
+          description: Project record updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Project
+      description: Delete a project record
+      operationId: deleteProject
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Project record deleted successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /skills/categories:
+    get:
+      tags:
+        - Skill
+      description: Retrieve skill categories
+      operationId: getSkillCategories
+      security: []
+      responses:
+        "200":
+          description: A list of skill categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryResponse"
+    post:
+      tags:
+        - Skill
+      description: Create a new skill category
+      operationId: createSkillCategory
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryRequest"
+      responses:
+        "201":
+          description: Skill category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /skills/categories/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdParam"
+    get:
+      tags:
+        - Skill
+      description: Retrieve a skill category by id
+      operationId: getSkillCategoryById
+      security: []
+      responses:
+        "200":
+          description: Skill category found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Skill
+      description: Update an existing skill category
+      operationId: updateSkillCategory
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryRequest"
+      responses:
+        "200":
+          description: Skill category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Skill
+      description: Delete a skill category
+      operationId: deleteSkillCategory
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Skill category deleted successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /skills:
+    get:
+      tags:
+        - Skill
+      description: Retrieve skill records
+      operationId: getSkills
+      security: []
+      responses:
+        "200":
+          description: A list of skill records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SkillResponse"
+    post:
+      tags:
+        - Skill
+      description: Create a new skill record
+      operationId: createSkill
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillRequest"
+      responses:
+        "201":
+          description: Skill record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /skills/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdParam"
+    get:
+      tags:
+        - Skill
+      description: Retrieve a skill record by id
+      operationId: getSkillById
+      security: []
+      responses:
+        "200":
+          description: Skill record found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Skill
+      description: Update an existing skill record
+      operationId: updateSkill
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillRequest"
+      responses:
+        "200":
+          description: Skill record updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Skill
+      description: Delete a skill record
+      operationId: deleteSkill
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Skill record deleted successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /portfolio:
+    get:
+      tags:
+        - Portfolio
+      description: Retrieve the complete portfolio aggregate for presentation
+      operationId: getPortfolio
+      security: []
+      responses:
+        "200":
+          description: The complete portfolio
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioResponse"
+    put:
+      tags:
+        - Portfolio
+      description: Update profile information for the singleton portfolio
+      operationId: updatePortfolio
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PortfolioRequest"
+      responses:
+        "200":
+          description: Portfolio profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /portfolio/photo:
+    put:
+      tags:
+        - Portfolio
+      description: Upload or replace the portfolio profile photo
+      operationId: updatePortfolioPhoto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PortfolioPhotoUploadRequest"
+      responses:
+        "200":
+          description: Portfolio photo updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioProfileResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BadRequestResponse"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UnauthorizedResponse"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFoundResponse"
+
+  schemas:
+    EducationRequest:
+      type: object
+      properties:
+        institution:
+          type: string
+          example: MIT
+        degree:
+          type: string
+          example: Bachelor of Science in Computer Science
+        startDate:
+          type: string
+          format: date
+          example: "2020-09-01"
+        endDate:
+          type: string
+          format: date
+          example: "2024-06-30"
+
+    EducationResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        - $ref: "#/components/schemas/EducationRequest"
+
+    ExperienceRequest:
+      type: object
+      properties:
+        company:
+          type: string
+          example: Google
+        position:
+          type: string
+          example: Software Engineer
+        mission:
+          type: array
+          items:
+            type: string
+          example:
+            - Developed new features for the search engine
+            - Improved performance of existing systems
+        startDate:
+          type: string
+          format: date
+          example: "2021-01-01"
+        endDate:
+          type: string
+          format: date
+          example: "2023-12-31"
+
+    ExperienceResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        - $ref: "#/components/schemas/ExperienceRequest"
+
+    ProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Personal Portfolio Website
+        description:
+          type: string
+          example: A personal portfolio website to showcase my projects and skills.
+        link:
+          type: string
+          format: uri
+          example: https://example.com/portfolio
+        screenshots:
+          type: array
+          items:
+            type: string
+          description: Stored local file names
+          example:
+            - portfolio-1.png
+            - portfolio-2.png
+        technologies:
+          type: array
+          items:
+            type: string
+          example:
+            - React
+            - Node.js
+            - MongoDB
+
+    ProjectUploadRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Personal Portfolio Website
+        description:
+          type: string
+          example: A personal portfolio website to showcase my projects and skills.
+        link:
+          type: string
+          format: uri
+          example: https://example.com/portfolio
+        screenshots:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: Binary image files uploaded and stored locally
+        technologies:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+
+    ProjectResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        - $ref: "#/components/schemas/ProjectRequest"
+
+    CategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Programming Languages
+
+    CategoryResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        - $ref: "#/components/schemas/CategoryRequest"
+
+    SkillRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Java
+        categoryId:
+          type: integer
+          example: 1
+
+    SkillResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        - $ref: "#/components/schemas/SkillRequest"
+
+    PortfolioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        currentPosition:
+          type: string
+          example: Software Engineer at Google
+
+    PortfolioPhotoUploadRequest:
+      type: object
+      properties:
+        photo:
+          type: string
+          format: binary
+      required:
+        - photo
+
+    PortfolioProfileResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        currentPosition:
+          type: string
+          example: Software Engineer at Google
+        photo:
+          type: string
+          description: Stored local file name
+          example: john-doe.png
+
+    PortfolioResponse:
+      type: object
+      properties:
+        generalInfo:
+          $ref: "#/components/schemas/PortfolioProfileResponse"
+        educations:
+          type: array
+          items:
+            $ref: "#/components/schemas/EducationResponse"
+        experiences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExperienceResponse"
+        projects:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProjectResponse"
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillResponse"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: An unexpected error occurred
+
+    BadRequestResponse:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      example:
+        error: Invalid input data
+
+    UnauthorizedResponse:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      example:
+        error: Unauthorized access
+
+    NotFoundResponse:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      example:
+        error: Resource not found

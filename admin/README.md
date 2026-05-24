@@ -7,8 +7,6 @@ Permet de modifier:
 * Expérience
 * Compétences
 * Projets
-* Loisirs
-* Contact
 * Informations globales
 
 ## Génération de CV
