@@ -593,6 +593,7 @@ components:
       required: true
       schema:
         type: integer
+        format: int64
         minimum: 1
       example: 1
   responses:
@@ -640,6 +641,7 @@ components:
           properties:
             id:
               type: integer
+              format: int64
               example: 1
         - $ref: "#/components/schemas/EducationRequest"
 
@@ -674,6 +676,7 @@ components:
           properties:
             id:
               type: integer
+              format: int64
               example: 1
         - $ref: "#/components/schemas/ExperienceRequest"
 
@@ -739,6 +742,7 @@ components:
           properties:
             id:
               type: integer
+              format: int64
               example: 1
         - $ref: "#/components/schemas/ProjectRequest"
 
@@ -755,6 +759,7 @@ components:
           properties:
             id:
               type: integer
+              format: int64
               example: 1
         - $ref: "#/components/schemas/CategoryRequest"
 
@@ -766,6 +771,7 @@ components:
           example: Java
         categoryId:
           type: integer
+          format: int64
           example: 1
 
     SkillResponse:
@@ -774,6 +780,7 @@ components:
           properties:
             id:
               type: integer
+              format: int64
               example: 1
         - $ref: "#/components/schemas/SkillRequest"
 
