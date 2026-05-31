@@ -762,10 +762,16 @@ components:
 
     CategoryRequest:
       type: object
+      required:
+        - name
       properties:
         name:
           type: string
+          minLength: 1
           example: Programming Languages
+        description:
+          type: string
+          example: Programming languages and related technologies
 
     CategoryResponse:
       allOf:
@@ -779,14 +785,16 @@ components:
 
     SkillRequest:
       type: object
+      required:
+        - name
+        - category
       properties:
         name:
           type: string
+          minLength: 1
           example: Java
-        categoryId:
-          type: integer
-          format: int64
-          example: 1
+        category:
+          $ref: "#/components/schemas/CategoryResponse"
 
     SkillResponse:
       allOf:
