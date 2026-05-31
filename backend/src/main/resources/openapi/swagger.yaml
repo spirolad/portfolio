@@ -619,15 +619,22 @@ components:
   schemas:
     EducationRequest:
       type: object
+      required:
+        - institution
+        - degree
+        - startDate
       properties:
         institution:
           type: string
+          minLength: 1
           example: MIT
         degree:
           type: string
+          minLength: 1
           example: Bachelor of Science in Computer Science
         startDate:
           type: string
+          nullable: false
           format: date
           example: "2020-09-01"
         endDate:
@@ -647,12 +654,18 @@ components:
 
     ExperienceRequest:
       type: object
+      required:
+        - company
+        - position
+        - startDate
       properties:
         company:
           type: string
+          minLength: 1
           example: Google
         position:
           type: string
+          minLength: 1
           example: Software Engineer
         mission:
           type: array
@@ -663,6 +676,7 @@ components:
             - Improved performance of existing systems
         startDate:
           type: string
+          nullable: false
           format: date
           example: "2021-01-01"
         endDate:

@@ -1,4 +1,4 @@
-package fr.spirolad.infrastructure.database;
+package fr.spirolad.infrastructure.persistence.database;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CollectionTable;
@@ -7,6 +7,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ExperienceEntity extends PanacheEntity {
 
     public String company;
+
     public String position;
 
     @ElementCollection
@@ -27,5 +29,4 @@ public class ExperienceEntity extends PanacheEntity {
 
     @Column(name = "end_date")
     public LocalDate endDate;
-
 }

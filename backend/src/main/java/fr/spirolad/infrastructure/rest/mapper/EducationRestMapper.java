@@ -1,4 +1,4 @@
-package fr.spirolad.application.mapper;
+package fr.spirolad.infrastructure.rest.mapper;
 
 import fr.spirolad.domain.model.Education;
 import fr.spirolad.dto.EducationRequest;
@@ -7,11 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "cdi")
-public interface EducationMapper {
+public interface EducationRestMapper {
 
-    EducationResponse toDto(Education education);
+    EducationResponse toResponse(Education education);
 
     @Mapping(target = "id", ignore = true)
-    Education toDomain(EducationRequest educationRequest);
-
+    Education toDomain(EducationRequest request);
 }

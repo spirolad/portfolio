@@ -1,8 +1,8 @@
 package fr.spirolad.unit;
 
 import fr.spirolad.domain.model.Education;
-import fr.spirolad.infrastructure.database.EducationEntity;
-import fr.spirolad.infrastructure.mapper.EducationPersistenceMapper;
+import fr.spirolad.infrastructure.persistence.database.EducationEntity;
+import fr.spirolad.infrastructure.persistence.mapper.EducationPersistenceMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

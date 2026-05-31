@@ -1,4 +1,4 @@
-package fr.spirolad.application.mapper;
+package fr.spirolad.infrastructure.rest.mapper;
 
 import fr.spirolad.domain.model.Experience;
 import fr.spirolad.dto.ExperienceRequest;
@@ -7,11 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "cdi")
-public interface ExperienceMapper {
+public interface ExperienceRestMapper {
 
-    ExperienceResponse toDto(Experience experience);
+    ExperienceResponse toResponse(Experience experience);
 
     @Mapping(target = "id", ignore = true)
     Experience toDomain(ExperienceRequest request);
-
 }
