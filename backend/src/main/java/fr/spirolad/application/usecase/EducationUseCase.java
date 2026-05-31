@@ -1,6 +1,7 @@
 package fr.spirolad.application.usecase;
 
 import fr.spirolad.domain.exception.ResourceNotFoundException;
+import fr.spirolad.domain.exception.InvalidRequestException;
 import fr.spirolad.domain.model.Education;
 import fr.spirolad.domain.port.EducationPersistencePort;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,6 +26,7 @@ public class EducationUseCase {
 
     @Transactional
     public Education saveEducation(Education education) {
+        validateEducation(education);
         return educationPersistencePort.save(education);
     }
 
@@ -45,6 +47,7 @@ public class EducationUseCase {
     public Education updateEducation(Long id, Education updatedEducation) {
         return educationPersistencePort.findById(id)
                 .map(existingEducation -> {
+                    validateEducation(updatedEducation);
                     existingEducation.setInstitution(updatedEducation.getInstitution());
                     existingEducation.setDegree(updatedEducation.getDegree());
                     existingEducation.setStartDate(updatedEducation.getStartDate());
@@ -52,6 +55,24 @@ public class EducationUseCase {
                     return educationPersistencePort.save(existingEducation);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Education not found with id: " + id));
+    }
+
+    private void validateEducation(Education education) {
+        if (education == null) {
+            throw new InvalidRequestException("Education must not be null");
+        }
+        if (education.getInstitution() == null || education.getInstitution().trim().isEmpty()) {
+            throw new InvalidRequestException("Institution is required");
+        }
+        if (education.getDegree() == null || education.getDegree().trim().isEmpty()) {
+            throw new InvalidRequestException("Degree is required");
+        }
+        if (education.getStartDate() == null) {
+            throw new InvalidRequestException("Start date is required");
+        }
+        if (education.getEndDate() != null && education.getEndDate().isBefore(education.getStartDate())) {
+            throw new InvalidRequestException("End date must be after or equal to start date");
+        }
     }
 
 }

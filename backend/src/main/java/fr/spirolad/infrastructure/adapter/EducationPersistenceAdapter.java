@@ -13,16 +13,18 @@ import java.util.Optional;
 @ApplicationScoped
 public class EducationPersistenceAdapter implements EducationPersistencePort {
 
-	@Inject
-	EducationPersistenceMapper educationPersistenceMapper;
+	private final EducationPersistenceMapper educationPersistenceMapper;
+
+	public EducationPersistenceAdapter(EducationPersistenceMapper educationPersistenceMapper) {
+		this.educationPersistenceMapper = educationPersistenceMapper;
+	}
 
 	@Override
 	public List<Education> findAll() {
-		return EducationEntity.listAll()
-				.stream()
-				.map(EducationEntity.class::cast)
-				.map(educationPersistenceMapper::toDomain)
-				.toList();
+		return EducationEntity.<EducationEntity>listAll()
+			.stream()
+			.map(educationPersistenceMapper::toDomain)
+			.toList();
 	}
 
 	@Override

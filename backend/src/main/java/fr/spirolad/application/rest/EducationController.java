@@ -7,11 +7,13 @@ import fr.spirolad.application.usecase.EducationUseCase;
 import fr.spirolad.dto.EducationRequest;
 import fr.spirolad.dto.EducationResponse;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
 @ApplicationScoped
+@Path("/educations")
 public class EducationController implements EducationsApi {
 
 	private final EducationUseCase educationUseCase;
