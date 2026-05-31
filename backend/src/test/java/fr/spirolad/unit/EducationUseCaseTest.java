@@ -14,6 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import fr.spirolad.domain.exception.InvalidRequestException;
 
 public class EducationUseCaseTest {
 
@@ -104,5 +105,23 @@ public class EducationUseCaseTest {
     void updateEducation_notFound_throws() {
         when(persistencePort.findById(99L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> useCase.updateEducation(99L, new Education()));
+    }
+
+    @Test
+    void saveEducation_invalidDates_throwsInvalidRequest() {
+        Education invalid = new Education(null, "Inst", "Deg", LocalDate.of(2022,1,1), LocalDate.of(2020,1,1));
+        assertThrows(InvalidRequestException.class, () -> useCase.saveEducation(invalid));
+        verify(persistencePort, never()).save(any());
+    }
+
+    @Test
+    void updateEducation_invalidDates_throwsInvalidRequest() {
+        Education existing = new Education(10L, "Old", "OldDeg", LocalDate.now().minusYears(3), null);
+        Education updated = new Education(null, "NewInst", "NewDeg", LocalDate.of(2022,1,1), LocalDate.of(2020,1,1));
+
+        when(persistencePort.findById(10L)).thenReturn(Optional.of(existing));
+
+        assertThrows(InvalidRequestException.class, () -> useCase.updateEducation(10L, updated));
+        verify(persistencePort, never()).save(any());
     }
 }
