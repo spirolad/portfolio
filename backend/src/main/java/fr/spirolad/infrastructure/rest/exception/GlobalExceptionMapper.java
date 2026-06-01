@@ -4,6 +4,7 @@ import fr.spirolad.domain.exception.EducationInvalideException;
 import fr.spirolad.domain.exception.EducationNotFoundException;
 import fr.spirolad.domain.exception.ExperienceInvalideException;
 import fr.spirolad.domain.exception.ExperienceNotFoundException;
+import fr.spirolad.domain.exception.ProjectNotFoundException;
 import fr.spirolad.domain.exception.SkillInvalideException;
 import fr.spirolad.domain.exception.SkillNotFoundException;
 import fr.spirolad.domain.exception.CategoryNotFoundException;
@@ -20,6 +21,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<RuntimeException> 
     private static final Map<Class<?>, Response.Status> NOT_FOUND_EXCEPTIONS = Map.ofEntries(
             Map.entry(EducationNotFoundException.class, Response.Status.NOT_FOUND),
             Map.entry(ExperienceNotFoundException.class, Response.Status.NOT_FOUND),
+                Map.entry(ProjectNotFoundException.class, Response.Status.NOT_FOUND),
             Map.entry(SkillNotFoundException.class, Response.Status.NOT_FOUND),
             Map.entry(CategoryNotFoundException.class, Response.Status.NOT_FOUND)
     );
