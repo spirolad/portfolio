@@ -241,7 +241,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: "#/components/schemas/ProjectUploadRequest"
       responses:
@@ -284,7 +284,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: "#/components/schemas/ProjectUploadRequest"
       responses:
@@ -554,32 +554,6 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /portfolio/photo:
-    put:
-      tags:
-        - Portfolio
-      description: Upload or replace the portfolio profile photo
-      operationId: updatePortfolioPhoto
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/PortfolioPhotoUploadRequest"
-      responses:
-        "200":
-          description: Portfolio photo updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortfolioProfileResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
 components:
   securitySchemes:
     bearerAuth:
@@ -741,8 +715,8 @@ components:
           type: array
           items:
             type: string
-            format: binary
-          description: Binary image files uploaded and stored locally
+            format: byte
+          description: Base64-encoded image files
         technologies:
           type: array
           items:
@@ -816,15 +790,11 @@ components:
         currentPosition:
           type: string
           example: Software Engineer at Google
-
-    PortfolioPhotoUploadRequest:
-      type: object
-      properties:
         photo:
           type: string
-          format: binary
-      required:
-        - photo
+          format: byte
+          description: Base64-encoded image data
+          example: iVBORw0KGgoAAAANSUhEUgAA...
 
     PortfolioProfileResponse:
       type: object
@@ -841,8 +811,9 @@ components:
           example: Software Engineer at Google
         photo:
           type: string
-          description: Stored local file name
-          example: john-doe.png
+          format: byte
+          description: Base64-encoded image data
+          example: iVBORw0KGgoAAAANSUhEUgAA...
 
     PortfolioResponse:
       type: object
