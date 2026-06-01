@@ -7,14 +7,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "category")
 public class CategoryEntity extends PanacheEntity {
-    public String name;
-    public String description;
+    private String name;
 
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, String description) {
+    public CategoryEntity(String name) {
         this.name = name;
-        this.description = description;
     }
 }

@@ -769,9 +769,6 @@ components:
           type: string
           minLength: 1
           example: Programming Languages
-        description:
-          type: string
-          example: Programming languages and related technologies
 
     CategoryResponse:
       allOf:

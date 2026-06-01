@@ -34,7 +34,6 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         Category existingCategory = categoryPersistencePort.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
         existingCategory.setName(category.getName());
-        existingCategory.setDescription(category.getDescription());
         return categoryPersistencePort.update(existingCategory);
     }
 
