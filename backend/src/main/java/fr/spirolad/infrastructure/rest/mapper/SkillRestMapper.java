@@ -9,8 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "cdi", uses = {CategoryRestMapper.class})
 public interface SkillRestMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "category", target = "category")
     Skill toDomain(SkillRequest dto);
 
     SkillResponse toResponse(Skill domain);
