@@ -15,18 +15,58 @@ import java.util.List;
 @Table(name = "experience")
 public class ExperienceEntity extends PanacheEntity {
 
-    public String company;
+    private String company;
 
-    public String position;
+    private String position;
 
     @ElementCollection
     @CollectionTable(name = "experience_mission", joinColumns = @JoinColumn(name = "experience_id"))
     @Column(name = "mission")
-    public List<String> mission;
+    private List<String> mission;
 
     @Column(name = "start_date")
-    public LocalDate startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    public LocalDate endDate;
+    private LocalDate endDate;
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public List<String> getMission() {
+        return mission;
+    }
+
+    public void setMission(List<String> mission) {
+        this.mission = mission;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 }
