@@ -811,7 +811,6 @@ components:
           example: Software Engineer at Google
         photo:
           type: string
-          format: byte
           description: Base64-encoded image data
           example: iVBORw0KGgoAAAANSUhEUgAA...
 

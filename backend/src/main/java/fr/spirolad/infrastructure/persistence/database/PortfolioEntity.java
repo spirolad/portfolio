@@ -17,8 +17,7 @@ public class PortfolioEntity extends PanacheEntity {
     @Column(name = "current_position")
     private String currentPosition;
 
-    @Lob
-    private byte[] photo;
+    private String photo;
 
     public String getName() {
         return name;
