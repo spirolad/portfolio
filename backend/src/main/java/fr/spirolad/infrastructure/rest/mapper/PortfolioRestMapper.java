@@ -15,4 +15,5 @@ public interface PortfolioRestMapper {
     PortfolioProfileResponse toResponse(PortfolioProfile profile);
 
     PortfolioResponse toResponse(Portfolio portfolio);
+
 }

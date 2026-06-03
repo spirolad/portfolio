@@ -2,22 +2,16 @@ package fr.spirolad.domain.model;
 
 public class PortfolioProfile {
 
-    private Long id;
     private String name;
     private String email;
     private String currentPosition;
-    private byte[] photo;
+    private String photo;
 
-    public PortfolioProfile(Long id, String name, String email, String currentPosition, byte[] photo) {
-        this.id = id;
+    public PortfolioProfile(String name, String email, String currentPosition, String photo) {
         this.name = name;
         this.email = email;
         this.currentPosition = currentPosition;
         this.photo = photo;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -44,11 +38,11 @@ public class PortfolioProfile {
         this.currentPosition = currentPosition;
     }
 
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 }

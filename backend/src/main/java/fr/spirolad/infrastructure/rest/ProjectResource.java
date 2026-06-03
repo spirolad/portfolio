@@ -2,6 +2,7 @@ package fr.spirolad.infrastructure.rest;
 
 import fr.spirolad.api.ProjectsApi;
 import fr.spirolad.application.port.inbound.ProjectUseCase;
+import fr.spirolad.dto.BadRequestResponse;
 import fr.spirolad.domain.model.Project;
 import fr.spirolad.dto.ProjectResponse;
 import fr.spirolad.dto.ProjectUploadRequest;
@@ -26,6 +27,14 @@ public class ProjectResource implements ProjectsApi {
 
     @Override
     public Response createProject(ProjectUploadRequest projectUploadRequest) {
+        if (projectUploadRequest != null && projectUploadRequest.getLink() != null) {
+            java.net.URI link = projectUploadRequest.getLink();
+            String scheme = link.getScheme();
+            if (scheme == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
+                BadRequestResponse resp = new BadRequestResponse().error("Invalid link");
+                return Response.status(Response.Status.BAD_REQUEST).entity(resp).build();
+            }
+        }
         Project createdProject = projectUseCase.saveProject(projectRestMapper.toDomain(projectUploadRequest));
         ProjectResponse response = projectRestMapper.toResponse(createdProject);
         return Response.status(Response.Status.CREATED).entity(response).build();

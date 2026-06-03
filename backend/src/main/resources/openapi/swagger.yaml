@@ -715,7 +715,6 @@ components:
           type: array
           items:
             type: string
-            format: byte
           description: Base64-encoded image files
         technologies:
           type: array
@@ -792,7 +791,6 @@ components:
           example: Software Engineer at Google
         photo:
           type: string
-          format: byte
           description: Base64-encoded image data
           example: iVBORw0KGgoAAAANSUhEUgAA...
 
@@ -811,7 +809,6 @@ components:
           example: Software Engineer at Google
         photo:
           type: string
-          format: byte
           description: Base64-encoded image data
           example: iVBORw0KGgoAAAANSUhEUgAA...
 

@@ -18,7 +18,8 @@ public class PortfolioEntity extends PanacheEntity {
     private String currentPosition;
 
     @Lob
-    private byte[] photo;
+    @Column(name = "photo", columnDefinition = "TEXT")
+    private String photo;
 
     public String getName() {
         return name;
@@ -44,11 +45,11 @@ public class PortfolioEntity extends PanacheEntity {
         this.currentPosition = currentPosition;
     }
 
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 }

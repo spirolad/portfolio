@@ -32,7 +32,7 @@ public class PortfolioUseCaseImpl implements PortfolioUseCase {
     @Override
     public Portfolio getPortfolio() {
         return new Portfolio(
-                portfolioPersistencePort.findSingleton().orElseGet(() -> new PortfolioProfile(null, null, null, null, null)),
+                portfolioPersistencePort.findSingleton().orElseGet(() -> new PortfolioProfile(null, null, null, null)) ,
                 educationPersistencePort.findAll(),
                 experiencePersistencePort.findAll(),
                 projectPersistencePort.findAll(),

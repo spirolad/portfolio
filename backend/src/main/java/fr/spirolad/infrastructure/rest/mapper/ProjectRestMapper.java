@@ -14,8 +14,6 @@ import java.util.List;
 public interface ProjectRestMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "screenshots", source = "screenshots")
-    @Mapping(target = "link", source = "link")
     Project toDomain(ProjectUploadRequest request);
 
     ProjectResponse toResponse(Project project);
@@ -28,9 +26,4 @@ public interface ProjectRestMapper {
         return value != null ? URI.create(value) : null;
     }
 
-    default List<String> map(List<byte[]> screenshots) {
-        return screenshots == null ? List.of() : screenshots.stream()
-                .map(Base64.getEncoder()::encodeToString)
-                .toList();
-    }
 }
