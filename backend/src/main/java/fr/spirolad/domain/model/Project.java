@@ -15,8 +15,8 @@ public class Project {
     public Project(Long id, String name, String description, String link, List<String> screenshots, List<String> technologies) {
         this.id = id;
         setName(name);
-        this.description = description;
-        this.link = link;
+        setDescription(description);
+        setLink(link);
         setScreenshots(screenshots);
         setTechnologies(technologies);
     }
@@ -41,6 +41,9 @@ public class Project {
     }
 
     public void setDescription(String description) {
+        if (description == null || description.trim().isBlank()) {
+            throw new IllegalArgumentException("Project description is required");
+        }
         this.description = description;
     }
 
@@ -49,6 +52,7 @@ public class Project {
     }
 
     public void setLink(String link) {
+        // TODO: Check if the link is a link
         this.link = link;
     }
 
