@@ -30,7 +30,7 @@ public class ProjectUseCaseTest {
 
     @Test
     void getAllProjects_delegatesToPort() {
-        Project project = new Project(1L, "Site", null, "https://example.com", List.of("c3RyaW5n"), List.of("React"));
+        Project project = new Project(1L, "Site", "My website", "https://example.com", List.of("c3RyaW5n"), List.of("React"));
         when(projectPersistencePort.findAll()).thenReturn(List.of(project));
 
         List<Project> result = useCase.getAllProjects();

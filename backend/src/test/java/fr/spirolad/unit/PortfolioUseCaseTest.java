@@ -49,7 +49,7 @@ public class PortfolioUseCaseTest {
         PortfolioProfile profile = new PortfolioProfile("John", "john@example.com", "Engineer", "AQI=");
         Education education = new Education(2L, "Uni", "Degree", LocalDate.now().minusYears(2), null);
         Experience experience = new Experience(3L, "Co", "Role", List.of("mission"), LocalDate.now().minusYears(3), null);
-        Project project = new Project(4L, "Site", null, "https://example.com", List.of("a"), List.of("Java"));
+        Project project = new Project(4L, "Site", "Magnificent site", "https://example.com", List.of("a"), List.of("Java"));
         Skill skill = new Skill(5L, "Java", new Category(6L, "Language"));
 
         when(portfolioPersistencePort.findSingleton()).thenReturn(Optional.of(profile));

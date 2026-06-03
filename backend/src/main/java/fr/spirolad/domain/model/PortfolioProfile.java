@@ -1,5 +1,7 @@
 package fr.spirolad.domain.model;
 
+import fr.spirolad.domain.exception.PortfolioInvalideException;
+
 public class PortfolioProfile {
 
     private String name;
@@ -8,10 +10,10 @@ public class PortfolioProfile {
     private String photo;
 
     public PortfolioProfile(String name, String email, String currentPosition, String photo) {
-        this.name = name;
-        this.email = email;
-        this.currentPosition = currentPosition;
-        this.photo = photo;
+        setName(name);
+        setEmail(email);
+        setCurrentPosition(currentPosition);
+        setPhoto(photo);
     }
 
     public String getName() {
@@ -19,6 +21,9 @@ public class PortfolioProfile {
     }
 
     public void setName(String name) {
+        if (name == null || name.trim().isBlank()) {
+            throw new PortfolioInvalideException("Le nom du profil de portfolio ne peut pas être vide.");
+        }
         this.name = name;
     }
 
@@ -27,6 +32,9 @@ public class PortfolioProfile {
     }
 
     public void setEmail(String email) {
+        if (email == null || email.trim().isBlank()) {
+            throw new PortfolioInvalideException("L'email du profil de portfolio ne peut pas être vide.");
+        }
         this.email = email;
     }
 
@@ -35,6 +43,9 @@ public class PortfolioProfile {
     }
 
     public void setCurrentPosition(String currentPosition) {
+        if (currentPosition == null || currentPosition.trim().isBlank()) {
+            throw new PortfolioInvalideException("Le poste actuel du profil de portfolio ne peut pas être vide.");
+        }
         this.currentPosition = currentPosition;
     }
 
@@ -43,6 +54,9 @@ public class PortfolioProfile {
     }
 
     public void setPhoto(String photo) {
+        if (photo == null || photo.trim().isBlank()) {
+            throw new PortfolioInvalideException("La photo du profil de portfolio ne peut pas être vide.");
+        }
         this.photo = photo;
     }
 }

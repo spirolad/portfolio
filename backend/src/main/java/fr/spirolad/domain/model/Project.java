@@ -1,5 +1,7 @@
 package fr.spirolad.domain.model;
 
+import fr.spirolad.domain.exception.ProjectInvalideException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class Project {
 
     public void setDescription(String description) {
         if (description == null || description.trim().isBlank()) {
-            throw new IllegalArgumentException("Project description is required");
+            throw new ProjectInvalideException("Project description is required");
         }
         this.description = description;
     }
@@ -52,7 +54,9 @@ public class Project {
     }
 
     public void setLink(String link) {
-        // TODO: Check if the link is a link
+        if (link == null || link.isBlank()) {
+            throw new ProjectInvalideException("Project link is required");
+        }
         this.link = link;
     }
 

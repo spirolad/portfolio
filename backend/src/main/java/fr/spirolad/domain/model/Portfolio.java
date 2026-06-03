@@ -1,5 +1,7 @@
 package fr.spirolad.domain.model;
 
+import fr.spirolad.domain.exception.PortfolioInvalideException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class Portfolio {
 
     public Portfolio(PortfolioProfile generalInfo, List<Education> educations, List<Experience> experiences,
                      List<Project> projects, List<Skill> skills) {
-        this.generalInfo = generalInfo;
+        setGeneralInfo(generalInfo);
         setEducations(educations);
         setExperiences(experiences);
         setProjects(projects);
@@ -25,6 +27,9 @@ public class Portfolio {
     }
 
     public void setGeneralInfo(PortfolioProfile generalInfo) {
+        if (generalInfo == null) {
+            throw new PortfolioInvalideException("Le profil général du portfolio ne peut pas être nul.");
+        }
         this.generalInfo = generalInfo;
     }
 

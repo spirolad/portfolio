@@ -1,13 +1,6 @@
 package fr.spirolad.infrastructure.rest.exception;
 
-import fr.spirolad.domain.exception.EducationInvalideException;
-import fr.spirolad.domain.exception.EducationNotFoundException;
-import fr.spirolad.domain.exception.ExperienceInvalideException;
-import fr.spirolad.domain.exception.ExperienceNotFoundException;
-import fr.spirolad.domain.exception.ProjectNotFoundException;
-import fr.spirolad.domain.exception.SkillInvalideException;
-import fr.spirolad.domain.exception.SkillNotFoundException;
-import fr.spirolad.domain.exception.CategoryNotFoundException;
+import fr.spirolad.domain.exception.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -30,7 +23,9 @@ public class GlobalExceptionMapper implements ExceptionMapper<RuntimeException> 
             Map.entry(EducationInvalideException.class, Response.Status.BAD_REQUEST),
             Map.entry(ExperienceInvalideException.class, Response.Status.BAD_REQUEST),
             Map.entry(SkillInvalideException.class, Response.Status.BAD_REQUEST),
-            Map.entry(IllegalArgumentException.class, Response.Status.BAD_REQUEST)
+            Map.entry(IllegalArgumentException.class, Response.Status.BAD_REQUEST),
+            Map.entry(ProjectNotFoundException.class, Response.Status.BAD_REQUEST),
+            Map.entry(PortfolioInvalideException.class, Response.Status.BAD_REQUEST)
     );
 
     @Override
