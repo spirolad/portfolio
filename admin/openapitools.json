@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.5.0",
+    "generators": {
+      "my-api": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "src/app/api/openapi/swagger.yaml",
+        "additionalProperties": {
+          "ngVersion": "17.0.0",
+          "providedInRoot": "true"
+        },
+        "output": "src/app/api/generated"
+      }
+    }
+  }
+}
