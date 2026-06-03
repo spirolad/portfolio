@@ -46,7 +46,7 @@ public class PortfolioUseCaseTest {
 
     @Test
     void getPortfolio_aggregatesAllData() {
-        PortfolioProfile profile = new PortfolioProfile(1L, "John", "john@example.com", "Engineer", new byte[]{1, 2});
+        PortfolioProfile profile = new PortfolioProfile("John", "john@example.com", "Engineer", "AQI=");
         Education education = new Education(2L, "Uni", "Degree", LocalDate.now().minusYears(2), null);
         Experience experience = new Experience(3L, "Co", "Role", List.of("mission"), LocalDate.now().minusYears(3), null);
         Project project = new Project(4L, "Site", null, "https://example.com", List.of("a"), List.of("Java"));
@@ -69,8 +69,8 @@ public class PortfolioUseCaseTest {
 
     @Test
     void updatePortfolio_savesProfileAndRefreshesAggregate() {
-        PortfolioProfile profile = new PortfolioProfile(null, "Jane", "jane@example.com", "Designer", new byte[]{9});
-        PortfolioProfile persistedProfile = new PortfolioProfile(1L, "Jane", "jane@example.com", "Designer", new byte[]{9});
+        PortfolioProfile profile = new PortfolioProfile("Jane", "jane@example.com", "Designer", "CQ==");
+        PortfolioProfile persistedProfile = new PortfolioProfile("Jane", "jane@example.com", "Designer", "CQ==");
 
         when(portfolioPersistencePort.save(profile)).thenReturn(persistedProfile);
         when(portfolioPersistencePort.findSingleton()).thenReturn(Optional.of(persistedProfile));
