@@ -36,7 +36,7 @@ public class ProjectPersistenceAdapter implements ProjectPersistencePort {
     @Transactional
     public Project save(Project project) {
         ProjectEntity entity = projectPersistenceMapper.toEntity(project);
-        if (entity.id == null) {
+        if (entity.getId() == null) {
             entity.persist();
             return projectPersistenceMapper.toDomain(entity);
         }

@@ -33,21 +33,14 @@ public class PortfolioPersistenceAdapter implements PortfolioPersistencePort {
     @Override
     @Transactional
     public PortfolioProfile save(PortfolioProfile portfolioProfile) {
-        PortfolioEntity entity = portfolioPersistenceMapper.toEntity(portfolioProfile);
-        PortfolioEntity existingEntity = PortfolioEntity.findAll().firstResultOptional()
-                .map(PortfolioEntity.class::cast)
-                .orElse(null);
+        // The profile is a singleton so we only update the first one
+        PortfolioEntity existing = PortfolioEntity.findById(1L);
+        PortfolioEntity entityToUpdate = portfolioPersistenceMapper.toEntity(portfolioProfile);
+        existing.setName(entityToUpdate.getName());
+        existing.setEmail(entityToUpdate.getEmail());
+        existing.setCurrentPosition(entityToUpdate.getCurrentPosition());
+        existing.setPhoto(entityToUpdate.getPhoto());
 
-        if (entity.id == null && existingEntity != null) {
-            entity.id = existingEntity.id;
-        }
-
-        if (entity.id == null) {
-            entity.persist();
-            return portfolioPersistenceMapper.toDomain(entity);
-        }
-
-        PortfolioEntity mergedEntity = entityManager.merge(entity);
-        return portfolioPersistenceMapper.toDomain(mergedEntity);
+        return portfolioPersistenceMapper.toDomain(existing);
     }
 }

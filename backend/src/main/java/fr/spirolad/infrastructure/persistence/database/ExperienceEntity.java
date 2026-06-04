@@ -1,22 +1,24 @@
 package fr.spirolad.infrastructure.persistence.database;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "experience")
-public class ExperienceEntity extends PanacheEntity {
+public class ExperienceEntity extends PanacheEntityBase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
     private String company;
 
+    @NotNull
     private String position;
 
     @ElementCollection
@@ -25,10 +27,16 @@ public class ExperienceEntity extends PanacheEntity {
     private List<String> mission;
 
     @Column(name = "start_date")
+    @NotNull
     private LocalDate startDate;
 
     @Column(name = "end_date")
+    @NotNull
     private LocalDate endDate;
+
+    public Long getId() {
+        return id;
+    }
 
     public String getCompany() {
         return company;

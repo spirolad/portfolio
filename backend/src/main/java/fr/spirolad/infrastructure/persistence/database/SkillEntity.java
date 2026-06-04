@@ -1,19 +1,23 @@
 package fr.spirolad.infrastructure.persistence.database;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "skill")
-public class SkillEntity extends PanacheEntity {
+public class SkillEntity extends PanacheEntityBase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
+    @NotNull
     private CategoryEntity category;
 
     public SkillEntity() {
@@ -22,6 +26,10 @@ public class SkillEntity extends PanacheEntity {
     public SkillEntity(String name, CategoryEntity category) {
         this.name = name;
         this.category = category;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

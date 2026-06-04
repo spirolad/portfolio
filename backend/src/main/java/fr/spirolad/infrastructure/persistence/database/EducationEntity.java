@@ -1,25 +1,40 @@
 package fr.spirolad.infrastructure.persistence.database;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "education")
-public class EducationEntity extends PanacheEntity {
+public class EducationEntity extends PanacheEntityBase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
     private String institution;
 
+    @NotNull
     private String degree;
 
     @Column(name = "start_date")
+    @NotNull
     private LocalDate startDate;
 
     @Column(name = "end_date")
+    @NotNull
     private LocalDate endDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getInstitution() {
         return institution;

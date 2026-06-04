@@ -40,7 +40,7 @@ public class CategoryPersistenceAdapter implements CategoryPersistencePort {
     @Transactional
     public Category save(Category category) {
         CategoryEntity entity = mapper.toEntity(category);
-        if (entity.id == null) {
+        if (entity.getId() == null) {
             entity.persist();
             return mapper.toDomain(entity);
         }

@@ -38,7 +38,7 @@ public class ExperiencePersistenceAdapter implements ExperiencePersistencePort {
     @Transactional
     public Experience save(Experience experience) {
         ExperienceEntity entity = experiencePersistenceMapper.toEntity(experience);
-        if (entity.id == null) {
+        if (entity.getId() == null) {
             entity.persist();
             return experiencePersistenceMapper.toDomain(entity);
         }

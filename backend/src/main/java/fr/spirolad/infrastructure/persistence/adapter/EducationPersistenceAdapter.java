@@ -38,7 +38,7 @@ public class EducationPersistenceAdapter implements EducationPersistencePort {
     @Transactional
     public Education save(Education education) {
         EducationEntity entity = educationPersistenceMapper.toEntity(education);
-        if (entity.id == null) {
+        if (entity.getId() == null) {
             entity.persist();
             return educationPersistenceMapper.toDomain(entity);
         }

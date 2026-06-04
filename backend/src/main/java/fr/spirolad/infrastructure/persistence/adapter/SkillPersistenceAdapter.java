@@ -40,7 +40,7 @@ public class SkillPersistenceAdapter implements SkillPersistencePort {
     @Transactional
     public Skill save(Skill skill) {
         SkillEntity entity = mapper.toEntity(skill);
-        if (entity.id == null) {
+        if (entity.getId() == null) {
             entity.persist();
             return mapper.toDomain(entity);
         }

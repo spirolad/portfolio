@@ -1,25 +1,27 @@
 package fr.spirolad.infrastructure.persistence.database;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "project")
-public class ProjectEntity extends PanacheEntity {
+public class ProjectEntity extends PanacheEntityBase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
     private String name;
 
+    @NotNull
     private String description;
 
+    @NotNull
     private String link;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -31,6 +33,10 @@ public class ProjectEntity extends PanacheEntity {
     @CollectionTable(name = "project_technology", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "technology")
     private List<String> technologies = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
