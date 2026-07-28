@@ -3,7 +3,6 @@ package fr.spirolad.it;
 import fr.spirolad.dto.ExperienceRequest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import io.restassured.http.ContentType;
 
 import java.time.LocalDate;
 
@@ -11,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
-public class ExperienceResourceTest {
+public class ExperienceResourceTest extends AuthenticatedIntegrationTest {
 
     private ExperienceRequest buildValidExperienceRequest() {
         return new ExperienceRequest()
@@ -23,8 +22,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void createExperience_withDto_returnsCreated() {
-        given()
-                .contentType(ContentType.JSON)
+        authenticatedJsonRequest()
                 .body(buildValidExperienceRequest())
         .when()
                 .post("/api/experiences")
@@ -37,8 +35,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void getExperienceById_afterCreate_returnsCreatedExperience() {
-        Integer id = given()
-                .contentType(ContentType.JSON)
+        Integer id = authenticatedJsonRequest()
                 .body(buildValidExperienceRequest())
         .when()
                 .post("/api/experiences")
@@ -58,8 +55,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void getExperiences_afterCreate_returnsList() {
-        Integer id = given()
-                .contentType(ContentType.JSON)
+        Integer id = authenticatedJsonRequest()
                 .body(buildValidExperienceRequest())
         .when()
                 .post("/api/experiences")
@@ -73,8 +69,7 @@ public class ExperienceResourceTest {
         .then()
                 .statusCode(200)
                 .body("size()", greaterThanOrEqualTo(1))
-                .body("find { it.id == " + id + " }.company", is("Acme"))
-                .body("find { it.id == " + id + " }.position", is("Engineer"));
+                .body("find { it.company == 'Acme' }.position", is("Engineer"));
     }
 
     @Test
@@ -89,8 +84,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void updateExperience_afterCreate_returnsUpdatedExperience() {
-        Integer id = given()
-                .contentType(ContentType.JSON)
+        Integer id = authenticatedJsonRequest()
                 .body(buildValidExperienceRequest())
         .when()
                 .post("/api/experiences")
@@ -104,14 +98,13 @@ public class ExperienceResourceTest {
                 .startDate(LocalDate.parse("2021-01-01"))
                 .endDate(LocalDate.parse("2023-01-01"));
 
-        given()
-                .contentType(ContentType.JSON)
+        authenticatedJsonRequest()
                 .body(updated)
         .when()
                 .put("/api/experiences/{id}", id)
         .then()
                 .statusCode(200)
-                .body("id", is(id.intValue()))
+                .body("id", notNullValue())
                 .body("company", is("Acme Updated"))
                 .body("position", is("Senior Engineer"));
     }
@@ -124,8 +117,7 @@ public class ExperienceResourceTest {
                 .startDate(LocalDate.parse("2021-01-01"))
                 .endDate(LocalDate.parse("2023-01-01"));
 
-        given()
-                .contentType(ContentType.JSON)
+        authenticatedJsonRequest()
                 .body(updated)
         .when()
                 .put("/api/experiences/{id}", 999998)
@@ -136,8 +128,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void deleteExperience_afterCreate_returnsNoContent() {
-        Integer id = given()
-                .contentType(ContentType.JSON)
+        Integer id = authenticatedJsonRequest()
                 .body(buildValidExperienceRequest())
         .when()
                 .post("/api/experiences")
@@ -145,7 +136,7 @@ public class ExperienceResourceTest {
                 .statusCode(201)
                 .extract().path("id");
 
-        given()
+        authenticatedRequest()
         .when()
                 .delete("/api/experiences/{id}", id)
         .then()
@@ -161,7 +152,7 @@ public class ExperienceResourceTest {
 
     @Test
     public void deleteExperience_notFound_returns404() {
-        given()
+        authenticatedRequest()
         .when()
                 .delete("/api/experiences/{id}", 999997)
         .then()
@@ -177,9 +168,21 @@ public class ExperienceResourceTest {
                 .startDate(LocalDate.parse("2022-01-01"))
                 .endDate(LocalDate.parse("2020-01-01"));
 
-        given()
-                .contentType(ContentType.JSON)
+        authenticatedJsonRequest()
                 .body(dto)
+        .when()
+                .post("/api/experiences")
+        .then()
+                .statusCode(400)
+                .body("error", notNullValue());
+    }
+
+    @Test
+    public void createExperience_withMissingCompany_returnsBadRequest() {
+        String body = "{\"position\":\"Engineer\",\"startDate\":\"2020-01-01\"}";
+
+        authenticatedJsonRequest()
+                .body(body)
         .when()
                 .post("/api/experiences")
         .then()

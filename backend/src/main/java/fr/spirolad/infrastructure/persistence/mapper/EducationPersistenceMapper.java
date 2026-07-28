@@ -4,7 +4,7 @@ import fr.spirolad.domain.model.Education;
 import fr.spirolad.infrastructure.persistence.database.EducationEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface EducationPersistenceMapper {
 
     Education toDomain(EducationEntity educationEntity);

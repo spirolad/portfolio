@@ -17,7 +17,7 @@ class EducationPersistenceMapperTest {
     @Test
     void toDomain_mapsAllFields() {
         EducationEntity entity = new EducationEntity();
-        entity.id = 42L;
+        entity.setId(42L);
         entity.setInstitution("Uni");
         entity.setDegree("MSc");
         entity.setStartDate(LocalDate.of(2020, 1, 1));
@@ -25,7 +25,7 @@ class EducationPersistenceMapperTest {
 
         Education domain = mapper.toDomain(entity);
 
-        assertEquals(entity.id, domain.getId());
+        assertEquals(entity.getId(), domain.getId());
         assertEquals(entity.getInstitution(), domain.getInstitution());
         assertEquals(entity.getDegree(), domain.getDegree());
         assertEquals(entity.getStartDate(), domain.getStartDate());
@@ -38,7 +38,7 @@ class EducationPersistenceMapperTest {
 
         EducationEntity entity = mapper.toEntity(domain);
 
-        assertEquals(domain.getId(), entity.id);
+        assertEquals(domain.getId(), entity.getId());
         assertEquals(domain.getInstitution(), entity.getInstitution());
         assertEquals(domain.getDegree(), entity.getDegree());
         assertEquals(domain.getStartDate(), entity.getStartDate());

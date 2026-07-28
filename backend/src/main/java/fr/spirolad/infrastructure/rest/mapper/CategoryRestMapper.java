@@ -6,7 +6,7 @@ import fr.spirolad.dto.CategoryResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface CategoryRestMapper {
 
     @Mapping(target = "id", ignore = true)

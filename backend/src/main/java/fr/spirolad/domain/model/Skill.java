@@ -4,7 +4,7 @@ public class Skill {
     private final Long id;
     private String name;
     private Category category;
-
+    
     public Skill(Long id, String name, Category category) {
         this.id = id;
         setName(name);

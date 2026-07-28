@@ -1,0 +1,83 @@
+<app-section-header title="Projets" subtitle="CRUD des projets et captures" />
+
+<mat-card class="border border-slate-200 shadow-sm">
+  <mat-card-content class="p-6">
+    <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+      <div class="space-y-3">
+        @if (loading()) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        @if (error()) {
+          <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ error() }}</p>
+        }
+
+        @for (item of projects(); track item.id) {
+          <button type="button" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50" (click)="editProject(item)">
+            <div class="flex items-center gap-3">
+              @if (item.screenshots && item.screenshots.length > 0) {
+                <img src="{{ getImageSrc(item.screenshots[0]) }}" alt="Thumb" style="width:56px;height:56px;object-fit:cover;border-radius:6px" />
+              } @else {
+                <div style="width:56px;height:56px" class="bg-slate-100 rounded-md"></div>
+              }
+
+              <div>
+                <div class="font-medium text-slate-900">{{ item.name || 'Sans nom' }}</div>
+                <div class="text-sm text-slate-600">{{ item.link || 'Aucun lien' }}</div>
+              </div>
+            </div>
+          </button>
+        }
+      </div>
+
+      <form class="grid gap-4" [formGroup]="form" (ngSubmit)="save()">
+        <div class="grid gap-4 md:grid-cols-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Lien</mat-label>
+            <input matInput formControlName="link" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="md:col-span-2">
+            <mat-label>Description</mat-label>
+            <textarea matInput rows="4" formControlName="description"></textarea>
+          </mat-form-field>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-3">Captures d'écran</label>
+            <div class="flex gap-3 flex-wrap">
+              @for (s of linesFromText(form.value.screenshotsText); track s) {
+                @if (getImageSrc(s)) {
+                  <div class="relative group">
+                    <img src="{{ getImageSrc(s) }}" alt="Screenshot" style="width:160px;height:100px;object-fit:cover;border-radius:6px" class="border border-slate-200" />
+                    <button type="button" (click)="removeScreenshot(s)" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold">
+                      ×
+                    </button>
+                  </div>
+                }
+              }
+              @if (linesFromText(form.value.screenshotsText).length === 0) {
+                <div class="text-sm text-slate-500">Aucune capture d'écran</div>
+              }
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="md:col-span-2">
+            <mat-label>Technologies, une par ligne</mat-label>
+            <textarea matInput rows="4" formControlName="technologiesText"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <input type="file" multiple accept="image/*" (change)="appendScreenshots($event)" />
+          <button mat-stroked-button type="button" (click)="reset()">Nouveau</button>
+          <button mat-stroked-button type="button" (click)="deleteCurrent()" [disabled]="projectId() === null">Supprimer</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="saving() || form.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>

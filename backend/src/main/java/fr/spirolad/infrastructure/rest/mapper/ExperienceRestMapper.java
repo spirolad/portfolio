@@ -6,7 +6,7 @@ import fr.spirolad.dto.ExperienceResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface ExperienceRestMapper {
 
     ExperienceResponse toResponse(Experience experience);

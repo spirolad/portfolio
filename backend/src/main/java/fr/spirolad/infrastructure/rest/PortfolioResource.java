@@ -6,6 +6,7 @@ import fr.spirolad.domain.model.Portfolio;
 import fr.spirolad.domain.model.PortfolioProfile;
 import fr.spirolad.dto.PortfolioRequest;
 import fr.spirolad.infrastructure.rest.mapper.PortfolioRestMapper;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -29,6 +30,7 @@ public class PortfolioResource implements PortfolioApi {
     }
 
     @Override
+    @Authenticated
     public Response updatePortfolio(PortfolioRequest portfolioRequest) {
         Portfolio portfolio = portfolioUseCase.updatePortfolio(portfolioRestMapper.toDomain(portfolioRequest));
         return Response.ok(portfolioRestMapper.toResponse(portfolio)).build();

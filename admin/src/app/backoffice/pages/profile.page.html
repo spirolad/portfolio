@@ -1,0 +1,96 @@
+<app-section-header
+  title="Profil"
+  subtitle="Informations générales du portfolio"
+/>
+
+<div class="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="space-y-6 p-6">
+      @if (loading()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+
+      @if (error()) {
+        <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ error() }}</p>
+      }
+
+      <form class="grid gap-4" [formGroup]="form" (ngSubmit)="save()">
+        <div class="grid gap-4 md:grid-cols-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Poste actuel</mat-label>
+          <input matInput formControlName="currentPosition" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Photo</mat-label>
+          <div class="flex items-center gap-4">
+            @if (getImageSrc(form.value.photo)) {
+              <img src="{{ getImageSrc(form.value.photo) }}" alt="Photo" style="width:96px;height:96px;object-fit:cover;border-radius:8px" />
+            } @else {
+              <div class="text-sm text-slate-500">Aucune photo</div>
+            }
+          </div>
+          <!-- Hidden textarea kept for form binding -->
+          <textarea matInput rows="1" formControlName="photo" hidden></textarea>
+        </mat-form-field>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <input type="file" accept="image/*" (change)="onPhotoSelected($event)" />
+          <button mat-stroked-button type="button" (click)="clearPhoto()">Vider la photo</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="saving() || form.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="p-6">
+      <h3 class="text-lg font-semibold text-slate-900">Aperçu</h3>
+      @if (portfolio()) {
+        <dl class="mt-5 space-y-3 text-sm">
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Nom</dt>
+            <dd>{{ portfolio()?.generalInfo?.name || '—' }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Email</dt>
+            <dd>{{ portfolio()?.generalInfo?.email || '—' }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Poste</dt>
+            <dd>{{ portfolio()?.generalInfo?.currentPosition || '—' }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Educations</dt>
+            <dd>{{ portfolio()?.educations?.length || 0 }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Experiences</dt>
+            <dd>{{ portfolio()?.experiences?.length || 0 }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-slate-200 pb-2">
+            <dt class="font-medium text-slate-600">Projects</dt>
+            <dd>{{ portfolio()?.projects?.length || 0 }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 pb-2">
+            <dt class="font-medium text-slate-600">Skills</dt>
+            <dd>{{ portfolio()?.skills?.length || 0 }}</dd>
+          </div>
+        </dl>
+      } @else {
+        <p class="mt-4 text-sm text-slate-600">Aucune donnée chargée.</p>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

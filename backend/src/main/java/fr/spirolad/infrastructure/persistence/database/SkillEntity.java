@@ -15,9 +15,8 @@ public class SkillEntity extends PanacheEntityBase {
     @NotNull
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
-    @NotNull
     private CategoryEntity category;
 
     public SkillEntity() {

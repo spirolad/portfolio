@@ -1,0 +1,30 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <mat-card class="w-full max-w-md p-6">
+    <mat-card-header>
+      <mat-card-title>Portfolio Admin Login</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (error()) {
+        <div class="text-red-500 mb-4">{{ error() }}</div>
+      }
+      <form [formGroup]="form" (ngSubmit)="login()" class="flex flex-col gap-4 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading() || form.invalid">
+          Login
+        </button>
+      </form>
+    </mat-card-content>
+    @if (loading()) {
+      <mat-card-footer>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </mat-card-footer>
+    }
+  </mat-card>
+</div>

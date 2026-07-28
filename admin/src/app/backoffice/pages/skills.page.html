@@ -1,0 +1,82 @@
+<app-section-header title="Compétences" subtitle="Categories et skills" />
+
+<div class="grid gap-6 xl:grid-cols-2">
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="p-6">
+      <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div class="space-y-3">
+          @if (loadingCategories()) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
+          @if (categoryError()) {
+            <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ categoryError() }}</p>
+          }
+
+          @for (item of categories(); track item.id) {
+            <button type="button" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50" (click)="editCategory(item)">
+              <div class="font-medium text-slate-900">{{ item.name }}</div>
+              <div class="text-sm text-slate-600">#{{ item.id ?? '—' }}</div>
+            </button>
+          }
+        </div>
+
+        <form class="grid gap-4" [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <div class="flex flex-wrap gap-3">
+            <button mat-stroked-button type="button" (click)="resetCategory()">Nouveau</button>
+            <button mat-stroked-button type="button" (click)="deleteCurrentCategory()" [disabled]="categoryId() === null">Supprimer</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="savingCategory() || categoryForm.invalid">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="p-6">
+      <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div class="space-y-3">
+          @if (loadingSkills()) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
+          @if (skillError()) {
+            <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ skillError() }}</p>
+          }
+
+          @for (item of skills(); track item.id) {
+            <button type="button" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50" (click)="editSkill(item)">
+              <div class="font-medium text-slate-900">{{ item.name }}</div>
+              <div class="text-sm text-slate-600">{{ item.category?.name || 'Sans catégorie' }}</div>
+            </button>
+          }
+        </div>
+
+        <form class="grid gap-4" [formGroup]="skillForm" (ngSubmit)="saveSkill()">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Catégorie</mat-label>
+            <mat-select formControlName="category">
+              @for (category of categories(); track category.id) {
+                <mat-option [value]="category.id ?? null">{{ category.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="flex flex-wrap gap-3">
+            <button mat-stroked-button type="button" (click)="resetSkill()">Nouveau</button>
+            <button mat-stroked-button type="button" (click)="deleteCurrentSkill()" [disabled]="skillId() === null">Supprimer</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="savingSkill() || skillForm.invalid">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

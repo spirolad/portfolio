@@ -6,6 +6,7 @@ import fr.spirolad.domain.model.Experience;
 import fr.spirolad.dto.ExperienceRequest;
 import fr.spirolad.dto.ExperienceResponse;
 import fr.spirolad.infrastructure.rest.mapper.ExperienceRestMapper;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -25,6 +26,7 @@ public class ExperienceResource implements ExperiencesApi {
     }
 
     @Override
+    @Authenticated
     public Response createExperience(ExperienceRequest experienceRequest) {
         Experience createdExperience = experienceUseCase.saveExperience(experienceRestMapper.toDomain(experienceRequest));
         ExperienceResponse response = experienceRestMapper.toResponse(createdExperience);
@@ -32,6 +34,7 @@ public class ExperienceResource implements ExperiencesApi {
     }
 
     @Override
+    @Authenticated
     public Response deleteExperience(Long id) {
         experienceUseCase.deleteExperienceById(id);
         return Response.noContent().build();
@@ -53,6 +56,7 @@ public class ExperienceResource implements ExperiencesApi {
     }
 
     @Override
+    @Authenticated
     public Response updateExperience(Long id, ExperienceRequest experienceRequest) {
         Experience updatedExperience = experienceUseCase.updateExperience(id, experienceRestMapper.toDomain(experienceRequest));
         return Response.ok(experienceRestMapper.toResponse(updatedExperience)).build();

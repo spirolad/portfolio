@@ -16,7 +16,32 @@ tags:
     description: Operations related to skill and category records
   - name: Portfolio
     description: Operations related to the portfolio aggregate and profile
+  - name: Auth
+    description: Authentication operations
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      description: Login to get a JWT token
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   /educations:
     get:
       tags:
@@ -757,24 +782,32 @@ components:
       type: object
       required:
         - name
-        - category
+        - categoryId
       properties:
+        name:
+          type: string
+          minLength: 1
+          example: Java
+        categoryId:
+          type: integer
+          format: int64
+          nullable: false
+          example: 1
+          description: The ID of the category this skill belongs to
+
+    SkillResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
         name:
           type: string
           minLength: 1
           example: Java
         category:
           $ref: "#/components/schemas/CategoryResponse"
-
-    SkillResponse:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: integer
-              format: int64
-              example: 1
-        - $ref: "#/components/schemas/SkillRequest"
 
     PortfolioRequest:
       type: object
@@ -858,3 +891,26 @@ components:
         - $ref: "#/components/schemas/ErrorResponse"
       example:
         error: Resource not found
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: admin123
+
+    LoginResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUz...
+

@@ -6,6 +6,7 @@ import fr.spirolad.domain.model.Education;
 import fr.spirolad.dto.EducationRequest;
 import fr.spirolad.dto.EducationResponse;
 import fr.spirolad.infrastructure.rest.mapper.EducationRestMapper;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -25,6 +26,7 @@ public class EducationResource implements EducationsApi {
     }
 
     @Override
+    @Authenticated
     public Response createEducation(EducationRequest educationRequest) {
         Education createdEducation = educationUseCase.saveEducation(educationRestMapper.toDomain(educationRequest));
         EducationResponse response = educationRestMapper.toResponse(createdEducation);
@@ -32,6 +34,7 @@ public class EducationResource implements EducationsApi {
     }
 
     @Override
+    @Authenticated
     public Response deleteEducation(Long id) {
         educationUseCase.deleteEducationById(id);
         return Response.noContent().build();
@@ -53,6 +56,7 @@ public class EducationResource implements EducationsApi {
     }
 
     @Override
+    @Authenticated
     public Response updateEducation(Long id, EducationRequest educationRequest) {
         Education updatedEducation = educationUseCase.updateEducation(id, educationRestMapper.toDomain(educationRequest));
         return Response.ok(educationRestMapper.toResponse(updatedEducation)).build();

@@ -10,7 +10,7 @@ import java.net.URI;
 import java.util.Base64;
 import java.util.List;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface ProjectRestMapper {
 
     @Mapping(target = "id", ignore = true)

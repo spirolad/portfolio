@@ -1,0 +1,105 @@
+<app-section-header title="Parcours" subtitle="Educations et experiences" />
+
+<div class="grid gap-6">
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="p-6">
+      <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div class="space-y-3">
+          @if (loadingEducations()) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
+          @if (educationError()) {
+            <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ educationError() }}</p>
+          }
+
+          @for (item of educations(); track item.id) {
+            <button type="button" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50" (click)="editEducation(item)">
+              <div class="font-medium text-slate-900">{{ item.institution }}</div>
+              <div class="text-sm text-slate-600">{{ item.degree }}</div>
+            </button>
+          }
+        </div>
+
+        <form class="grid gap-4" [formGroup]="educationForm" (ngSubmit)="saveEducation()">
+          <div class="grid gap-4 md:grid-cols-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Institution</mat-label>
+              <input matInput formControlName="institution" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Diplôme</mat-label>
+              <input matInput formControlName="degree" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="startDate" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="endDate" />
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button mat-stroked-button type="button" (click)="resetEducation()">Nouveau</button>
+            <button mat-stroked-button type="button" (click)="deleteCurrentEducation()" [disabled]="educationId() === null">Supprimer</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="savingEducation() || educationForm.invalid">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="border border-slate-200 shadow-sm">
+    <mat-card-content class="p-6">
+      <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div class="space-y-3">
+          @if (loadingExperiences()) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
+          @if (experienceError()) {
+            <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ experienceError() }}</p>
+          }
+
+          @for (item of experiences(); track item.id) {
+            <button type="button" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50" (click)="editExperience(item)">
+              <div class="font-medium text-slate-900">{{ item.company }}</div>
+              <div class="text-sm text-slate-600">{{ item.position }}</div>
+            </button>
+          }
+        </div>
+
+        <form class="grid gap-4" [formGroup]="experienceForm" (ngSubmit)="saveExperience()">
+          <div class="grid gap-4 md:grid-cols-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Entreprise</mat-label>
+              <input matInput formControlName="company" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Poste</mat-label>
+              <input matInput formControlName="position" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="md:col-span-2">
+              <mat-label>Missions, une par ligne</mat-label>
+              <textarea matInput rows="5" formControlName="missionText"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="startDate" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="endDate" />
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button mat-stroked-button type="button" (click)="resetExperience()">Nouveau</button>
+            <button mat-stroked-button type="button" (click)="deleteCurrentExperience()" [disabled]="experienceId() === null">Supprimer</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="savingExperience() || experienceForm.invalid">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

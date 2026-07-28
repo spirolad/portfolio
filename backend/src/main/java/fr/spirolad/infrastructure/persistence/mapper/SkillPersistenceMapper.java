@@ -4,7 +4,7 @@ import fr.spirolad.domain.model.Skill;
 import fr.spirolad.infrastructure.persistence.database.SkillEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi", uses = {CategoryPersistenceMapper.class})
+@Mapper(componentModel = "jakarta-cdi", uses = {CategoryPersistenceMapper.class})
 public interface SkillPersistenceMapper {
 
     Skill toDomain(SkillEntity entity);

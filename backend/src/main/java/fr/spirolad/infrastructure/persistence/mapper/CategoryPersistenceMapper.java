@@ -4,7 +4,7 @@ import fr.spirolad.domain.model.Category;
 import fr.spirolad.infrastructure.persistence.database.CategoryEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface CategoryPersistenceMapper {
 
     Category toDomain(CategoryEntity entity);

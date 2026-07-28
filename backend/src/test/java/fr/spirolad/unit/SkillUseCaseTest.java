@@ -1,5 +1,7 @@
 package fr.spirolad.unit;
 
+import fr.spirolad.application.command.SkillCommand;
+import fr.spirolad.application.port.outbound.CategoryPersistencePort;
 import fr.spirolad.application.port.outbound.SkillPersistencePort;
 import fr.spirolad.application.usecase.SkillUseCaseImpl;
 import fr.spirolad.domain.exception.SkillNotFoundException;
@@ -21,12 +23,14 @@ import static org.mockito.Mockito.when;
 public class SkillUseCaseTest {
 
     private SkillPersistencePort skillPersistencePort;
+    private CategoryPersistencePort categoryPersistencePort;
     private SkillUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
         skillPersistencePort = mock(SkillPersistencePort.class);
-        useCase = new SkillUseCaseImpl(skillPersistencePort);
+        categoryPersistencePort = mock(CategoryPersistencePort.class);
+        useCase = new SkillUseCaseImpl(skillPersistencePort, categoryPersistencePort);
     }
 
     @Test
@@ -43,14 +47,16 @@ public class SkillUseCaseTest {
 
     @Test
     void saveSkill_delegatesToPort() {
-        Skill input = new Skill(null, "Java", new Category(10L, "Language"));
+        SkillCommand input = new SkillCommand("Java", 10L);
+        Category category = new Category(10L, "Language");
         Skill saved = new Skill(5L, "Java", new Category(10L, "Language"));
-        when(skillPersistencePort.save(input)).thenReturn(saved);
+        when(categoryPersistencePort.findById(10L)).thenReturn(Optional.of(category));
+        when(skillPersistencePort.save(any())).thenReturn(saved);
 
         Skill result = useCase.saveSkill(input);
 
         assertEquals(saved, result);
-        verify(skillPersistencePort).save(input);
+        verify(skillPersistencePort).save(any());
     }
 
     @Test
@@ -73,9 +79,11 @@ public class SkillUseCaseTest {
     @Test
     void updateSkill_found_updatesAndSaves() {
         Skill existing = new Skill(3L, "Old", new Category(10L, "Language"));
-        Skill updated = new Skill(null, "New", new Category(11L, "Framework"));
+        SkillCommand updated = new SkillCommand("New", 11L);
+        Category category = new Category(11L, "Framework");
 
         when(skillPersistencePort.findById(3L)).thenReturn(Optional.of(existing));
+        when(categoryPersistencePort.findById(11L)).thenReturn(Optional.of(category));
         when(skillPersistencePort.update(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Skill result = useCase.updateSkill(3L, updated);
@@ -90,7 +98,7 @@ public class SkillUseCaseTest {
     void updateSkill_notFound_throws() {
         when(skillPersistencePort.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(SkillNotFoundException.class, () -> useCase.updateSkill(99L, new Skill(null, "A", new Category(1L, "Cat"))));
+        assertThrows(SkillNotFoundException.class, () -> useCase.updateSkill(99L, new SkillCommand("A", 1L)));
     }
 
     @Test

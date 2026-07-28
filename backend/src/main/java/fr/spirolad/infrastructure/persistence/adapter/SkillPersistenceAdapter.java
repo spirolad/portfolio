@@ -2,6 +2,7 @@ package fr.spirolad.infrastructure.persistence.adapter;
 
 import fr.spirolad.application.port.outbound.SkillPersistencePort;
 import fr.spirolad.domain.model.Skill;
+import fr.spirolad.infrastructure.persistence.database.CategoryEntity;
 import fr.spirolad.infrastructure.persistence.database.SkillEntity;
 import fr.spirolad.infrastructure.persistence.mapper.SkillPersistenceMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,6 +41,10 @@ public class SkillPersistenceAdapter implements SkillPersistencePort {
     @Transactional
     public Skill save(Skill skill) {
         SkillEntity entity = mapper.toEntity(skill);
+        if (skill.getCategory() != null && skill.getCategory().getId() != null) {
+            entity.setCategory(em.getReference(CategoryEntity.class, skill.getCategory().getId()));
+        }
+
         if (entity.getId() == null) {
             entity.persist();
             return mapper.toDomain(entity);
@@ -52,6 +57,11 @@ public class SkillPersistenceAdapter implements SkillPersistencePort {
     @Transactional
     public Skill update(Skill skill) {
         SkillEntity entity = mapper.toEntity(skill);
+
+        if (skill.getCategory() != null && skill.getCategory().getId() != null) {
+            entity.setCategory(em.getReference(CategoryEntity.class, skill.getCategory().getId()));
+        }
+
         SkillEntity merged = em.merge(entity);
         return mapper.toDomain(merged);
     }

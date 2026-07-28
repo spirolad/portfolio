@@ -49,8 +49,8 @@ public class DomainConfig {
     }
 
     @Produces
-    public SkillUseCase skillUseCase(SkillPersistencePort skillPersistencePort) {
-        return new SkillUseCaseImpl(skillPersistencePort);
+    public SkillUseCase skillUseCase(SkillPersistencePort skillPersistencePort, CategoryPersistencePort categoryPersistencePort) {
+        return new SkillUseCaseImpl(skillPersistencePort, categoryPersistencePort);
     }
 
     @Produces

@@ -7,10 +7,12 @@ import fr.spirolad.domain.model.Project;
 import fr.spirolad.dto.ProjectResponse;
 import fr.spirolad.dto.ProjectUploadRequest;
 import fr.spirolad.infrastructure.rest.mapper.ProjectRestMapper;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
+import java.net.URI;
 import java.util.List;
 
 @ApplicationScoped
@@ -26,11 +28,12 @@ public class ProjectResource implements ProjectsApi {
     }
 
     @Override
+    @Authenticated
     public Response createProject(ProjectUploadRequest projectUploadRequest) {
         if (projectUploadRequest != null && projectUploadRequest.getLink() != null) {
-            java.net.URI link = projectUploadRequest.getLink();
+            URI link = projectUploadRequest.getLink();
             String scheme = link.getScheme();
-            if (scheme == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
+            if (!("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
                 BadRequestResponse resp = new BadRequestResponse().error("Invalid link");
                 return Response.status(Response.Status.BAD_REQUEST).entity(resp).build();
             }
@@ -41,6 +44,7 @@ public class ProjectResource implements ProjectsApi {
     }
 
     @Override
+    @Authenticated
     public Response deleteProject(Long id) {
         projectUseCase.deleteProject(id);
         return Response.noContent().build();
@@ -61,6 +65,7 @@ public class ProjectResource implements ProjectsApi {
     }
 
     @Override
+    @Authenticated
     public Response updateProject(Long id, ProjectUploadRequest projectUploadRequest) {
         Project updatedProject = projectUseCase.updateProject(id, projectRestMapper.toDomain(projectUploadRequest));
         return Response.ok(projectRestMapper.toResponse(updatedProject)).build();

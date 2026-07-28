@@ -4,7 +4,7 @@ import fr.spirolad.domain.model.PortfolioProfile;
 import fr.spirolad.infrastructure.persistence.database.PortfolioEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta-cdi")
 public interface PortfolioPersistenceMapper {
 
     PortfolioProfile toDomain(PortfolioEntity portfolioEntity);
