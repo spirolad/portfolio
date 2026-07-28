@@ -19,6 +19,10 @@ public class GlobalExceptionMapper implements ExceptionMapper<RuntimeException> 
             Map.entry(CategoryNotFoundException.class, Response.Status.NOT_FOUND)
     );
 
+    private static final Map<Class<?>, Response.Status> CONFLICT_EXCEPTIONS = Map.ofEntries(
+            Map.entry(CategoryHasSkillsException.class, Response.Status.CONFLICT)
+    );
+
     private static final Map<Class<?>, Response.Status> BAD_REQUEST_EXCEPTIONS = Map.ofEntries(
             Map.entry(EducationInvalideException.class, Response.Status.BAD_REQUEST),
             Map.entry(ExperienceInvalideException.class, Response.Status.BAD_REQUEST),
@@ -39,6 +43,10 @@ public class GlobalExceptionMapper implements ExceptionMapper<RuntimeException> 
 
         if (NOT_FOUND_EXCEPTIONS.containsKey(exceptionClass)) {
             return Response.Status.NOT_FOUND;
+        }
+
+        if (CONFLICT_EXCEPTIONS.containsKey(exceptionClass)) {
+            return Response.Status.CONFLICT;
         }
 
         if (BAD_REQUEST_EXCEPTIONS.containsKey(exceptionClass)) {

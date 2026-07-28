@@ -9,5 +9,6 @@ public interface SkillPersistencePort {
     Optional<Skill> findById(Long skillId);
     Skill save(Skill skill);
     Skill update(Skill skill);
+    boolean existsByCategoryId(Long categoryId);
     void deleteById(Long skillId);
 }

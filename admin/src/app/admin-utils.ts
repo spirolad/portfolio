@@ -39,6 +39,16 @@ export function errorMessage(error: unknown): string {
   }
 
   if (error && typeof error === 'object') {
+    // Check for error.error.error (backend returns { error: message })
+    const backendError = (error as { error?: unknown }).error;
+    if (backendError && typeof backendError === 'object') {
+      const errorField = (backendError as { error?: unknown }).error;
+      if (typeof errorField === 'string' && errorField.trim().length > 0) {
+        return errorField;
+      }
+    }
+
+    // Check for error.message
     const maybeMessage = (error as { message?: unknown }).message;
     if (typeof maybeMessage === 'string' && maybeMessage.trim().length > 0) {
       return maybeMessage;

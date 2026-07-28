@@ -98,6 +98,37 @@ public class SkillResourceTest extends AuthenticatedIntegrationTest {
     }
 
     @Test
+    public void deleteCategory_withLinkedSkills_returnsConflict() {
+        CategoryResponse category = createCategory("Mobile");
+        Integer skillId = authenticatedJsonRequest()
+                .body(createSkillRequest(category))
+        .when()
+                .post("/api/skills")
+        .then()
+                .statusCode(201)
+                .extract().path("id");
+
+        authenticatedRequest()
+        .when()
+                .delete("/api/skills/categories/{id}", category.getId())
+        .then()
+                .statusCode(409)
+                .body("error", is("Cannot delete category " + category.getId() + " because it has associated skills. Please delete the skills first."));
+
+        authenticatedRequest()
+        .when()
+                .delete("/api/skills/{id}", skillId)
+        .then()
+                .statusCode(204);
+
+        authenticatedRequest()
+        .when()
+                .delete("/api/skills/categories/{id}", category.getId())
+        .then()
+                .statusCode(204);
+    }
+
+    @Test
     public void getSkills_afterCreate_returnsList() {
         CategoryResponse category = createCategory("Frontend");
         Integer id = authenticatedJsonRequest()

@@ -1,7 +1,9 @@
 package fr.spirolad.unit;
 
 import fr.spirolad.application.port.outbound.CategoryPersistencePort;
+import fr.spirolad.application.port.outbound.SkillPersistencePort;
 import fr.spirolad.application.usecase.CategoryUseCaseImpl;
+import fr.spirolad.domain.exception.CategoryHasSkillsException;
 import fr.spirolad.domain.exception.CategoryNotFoundException;
 import fr.spirolad.domain.model.Category;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,18 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CategoryUseCaseTest {
 
     private CategoryPersistencePort categoryPersistencePort;
+    private SkillPersistencePort skillPersistencePort;
     private CategoryUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
         categoryPersistencePort = mock(CategoryPersistencePort.class);
-        useCase = new CategoryUseCaseImpl(categoryPersistencePort);
+        skillPersistencePort = mock(SkillPersistencePort.class);
+        useCase = new CategoryUseCaseImpl(categoryPersistencePort, skillPersistencePort);
     }
 
     @Test
@@ -93,8 +98,21 @@ public class CategoryUseCaseTest {
 
     @Test
     void deleteCategory_delegatesToPort() {
+        when(skillPersistencePort.existsByCategoryId(12L)).thenReturn(false);
+
         useCase.deleteCategory(12L);
 
+        verify(skillPersistencePort).existsByCategoryId(12L);
         verify(categoryPersistencePort).deleteById(12L);
+    }
+
+    @Test
+    void deleteCategory_withLinkedSkills_throwsConflict() {
+        when(skillPersistencePort.existsByCategoryId(12L)).thenReturn(true);
+
+        assertThrows(CategoryHasSkillsException.class, () -> useCase.deleteCategory(12L));
+
+        verify(skillPersistencePort).existsByCategoryId(12L);
+        verify(categoryPersistencePort, never()).deleteById(12L);
     }
 }

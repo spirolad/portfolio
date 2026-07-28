@@ -54,7 +54,8 @@ public class DomainConfig {
     }
 
     @Produces
-    public CategoryUseCase categoryUseCase(CategoryPersistencePort categoryPersistencePort) {
-        return new CategoryUseCaseImpl(categoryPersistencePort);
+    public CategoryUseCase categoryUseCase(CategoryPersistencePort categoryPersistencePort,
+                                           SkillPersistencePort skillPersistencePort) {
+        return new CategoryUseCaseImpl(categoryPersistencePort, skillPersistencePort);
     }
 }

@@ -67,6 +67,11 @@ public class SkillPersistenceAdapter implements SkillPersistencePort {
     }
 
     @Override
+    public boolean existsByCategoryId(Long categoryId) {
+        return SkillEntity.count("category.id", categoryId) > 0;
+    }
+
+    @Override
     @Transactional
     public void deleteById(Long skillId) {
         SkillEntity.deleteById(skillId);
