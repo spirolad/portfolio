@@ -22,6 +22,7 @@
 
               <div>
                 <div class="font-medium text-slate-900">{{ item.name || 'Sans nom' }}</div>
+                <div class="text-sm text-slate-600">{{ projectSummary(item) }}</div>
                 <div class="text-sm text-slate-600">{{ item.link || 'Aucun lien' }}</div>
               </div>
             </div>
@@ -34,6 +35,11 @@
           <mat-form-field appearance="outline">
             <mat-label>Nom</mat-label>
             <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Résumé</mat-label>
+            <textarea matInput rows="3" formControlName="summary"></textarea>
           </mat-form-field>
 
           <mat-form-field appearance="outline">

@@ -1,0 +1,65 @@
+---
+import { toImageSrc, type Project } from '@/lib/portfolio';
+
+const { project, modalId, titleId, summary } = Astro.props as {
+  project: Project;
+  modalId: string;
+  titleId: string;
+  summary: string;
+};
+
+const screenshots = project.screenshots ?? [];
+const technologies = project.technologies ?? [];
+---
+
+<dialog id={modalId} class="project-modal" aria-labelledby={titleId}>
+  <div class="project-modal__surface">
+    <div class="project-modal__header">
+      <div>
+        <p class="project-modal__eyebrow">Projet en détail</p>
+        <h3 id={titleId}>{project.name}</h3>
+      </div>
+      <form method="dialog">
+        <button class="project-modal__close" type="submit" aria-label="Fermer la popup">×</button>
+      </form>
+    </div>
+
+    <p class="project-modal__summary">{summary}</p>
+    <p class="project-modal__description">{project.description ?? 'Aucune description disponible.'}</p>
+
+    <section class="project-modal__section">
+      <h4>Captures d’écran</h4>
+      {screenshots.length > 0 ? (
+        <div class="project-modal__gallery">
+          {screenshots.map((screenshot, screenshotIndex) => {
+            const src = toImageSrc(screenshot);
+            return src ? <img src={src} alt={`${project.name} - capture ${screenshotIndex + 1}`} /> : null;
+          })}
+        </div>
+      ) : (
+        <p class="meta">Aucune capture d’écran disponible.</p>
+      )}
+    </section>
+
+    <section class="project-modal__section">
+      <h4>Technologies</h4>
+      {technologies.length > 0 ? (
+        <div class="skill-list">
+          {technologies.map((tech) => <span class="chip">{tech}</span>)}
+        </div>
+      ) : (
+        <p class="meta">Aucune technologie renseignée.</p>
+      )}
+    </section>
+
+    <div class="project-modal__footer">
+      {project.link ? (
+        <a class="button primary" href={project.link} target="_blank" rel="noreferrer">Visiter le projet ↗</a>
+      ) : (
+        <span class="meta">Projet interne</span>
+      )}
+    </div>
+  </div>
+</dialog>
+
+

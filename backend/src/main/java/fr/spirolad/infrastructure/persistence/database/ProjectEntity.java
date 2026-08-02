@@ -21,12 +21,15 @@ public class ProjectEntity extends PanacheEntityBase {
     @NotNull
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+
     @NotNull
     private String link;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_screenshot", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "screenshot")
+    @Column(name = "screenshot", columnDefinition = "TEXT")
     private List<String> screenshots = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -52,6 +55,14 @@ public class ProjectEntity extends PanacheEntityBase {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getLink() {

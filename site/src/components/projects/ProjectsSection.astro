@@ -1,0 +1,63 @@
+---
+import { type Project } from '@/lib/portfolio';
+import ProjectCard from './ProjectCard.astro';
+import ProjectModal from './ProjectModal.astro';
+
+const { projects } = Astro.props as {
+  projects: Project[];
+};
+---
+
+<section id="projets" class="section glass">
+  <h2>Projets</h2>
+  <div class="project-grid">
+    {projects.length > 0 ? projects.map((project, index) => {
+      const modalId = `project-modal-${project.id ?? index}`;
+      const summary = project.summary ?? project.description ?? 'Aucun résumé disponible.';
+
+      return <ProjectCard project={project} modalId={modalId} summary={summary} />;
+    }) : <p class="meta">Aucun projet disponible.</p>}
+  </div>
+
+  {projects.map((project, index) => {
+    const summary = project.summary ?? project.description ?? 'Aucun résumé disponible.';
+    const modalId = `project-modal-${project.id ?? index}`;
+    const titleId = `${modalId}-title`;
+
+    return <ProjectModal project={project} modalId={modalId} titleId={titleId} summary={summary} />;
+  })}
+
+  <script is:inline>
+    const openModal = (id) => {
+      const dialog = document.getElementById(id);
+      if (dialog instanceof HTMLDialogElement) {
+        dialog.showModal();
+      }
+    };
+
+    document.querySelectorAll('[data-project-modal]').forEach((card) => {
+      const modalId = card.getAttribute('data-project-modal');
+      if (!modalId) return;
+
+      const trigger = () => openModal(modalId);
+      card.addEventListener('click', trigger);
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          trigger();
+        }
+      });
+    });
+
+    document.querySelectorAll('dialog.project-modal').forEach((dialog) => {
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+          dialog.close();
+        }
+      });
+    });
+  </script>
+</section>
+
+
+

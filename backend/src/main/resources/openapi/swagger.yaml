@@ -699,6 +699,9 @@ components:
         name:
           type: string
           example: Personal Portfolio Website
+        summary:
+          type: string
+          example: A short preview sentence shown on the home page.
         description:
           type: string
           example: A personal portfolio website to showcase my projects and skills.
@@ -729,6 +732,9 @@ components:
         name:
           type: string
           example: Personal Portfolio Website
+        summary:
+          type: string
+          example: A short preview sentence shown on the home page.
         description:
           type: string
           example: A personal portfolio website to showcase my projects and skills.

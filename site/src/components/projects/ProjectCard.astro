@@ -1,0 +1,33 @@
+---
+import { toImageSrc, type Project } from '@/lib/portfolio';
+
+const { project, modalId, summary } = Astro.props as {
+  project: Project;
+  modalId: string;
+  summary: string;
+};
+
+const cover = toImageSrc(project.screenshots?.[0]);
+---
+
+<article
+  class="card project-card project-card--interactive"
+  data-project-modal={modalId}
+  tabindex="0"
+  aria-haspopup="dialog"
+  aria-controls={modalId}
+>
+  {cover ? <img class="project-visual" src={cover} alt={project.name} /> : <div class="project-visual"></div>}
+  <div class="project-body">
+    <div class="topline">
+      <strong>{project.name}</strong>
+      <span>Voir les détails</span>
+    </div>
+    <p class="project-summary">{summary}</p>
+    <div class="skill-list">
+      {(project.technologies ?? []).map((tech) => <span class="chip">{tech}</span>)}
+    </div>
+  </div>
+</article>
+
+

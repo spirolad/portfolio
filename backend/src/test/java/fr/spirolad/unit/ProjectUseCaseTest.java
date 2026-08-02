@@ -30,7 +30,7 @@ public class ProjectUseCaseTest {
 
     @Test
     void getAllProjects_delegatesToPort() {
-        Project project = new Project(1L, "Site", "My website", "https://example.com", List.of("c3RyaW5n"), List.of("React"));
+        Project project = new Project(1L, "Site", "My website", "Short summary", "https://example.com", List.of("c3RyaW5n"), List.of("React"));
         when(projectPersistencePort.findAll()).thenReturn(List.of(project));
 
         List<Project> result = useCase.getAllProjects();
@@ -49,8 +49,8 @@ public class ProjectUseCaseTest {
 
     @Test
     void updateProject_found_updatesAndSaves() {
-        Project existing = new Project(3L, "Old", "Old description", "https://old.example.com", List.of("a"), List.of("Java"));
-        Project updated = new Project(null, "New", "New description", "https://new.example.com", List.of("b"), List.of("Quarkus"));
+        Project existing = new Project(3L, "Old", "Old description", "Old summary", "https://old.example.com", List.of("a"), List.of("Java"));
+        Project updated = new Project(null, "New", "New description", "New summary", "https://new.example.com", List.of("b"), List.of("Quarkus"));
 
         when(projectPersistencePort.findById(3L)).thenReturn(Optional.of(existing));
         when(projectPersistencePort.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -60,6 +60,7 @@ public class ProjectUseCaseTest {
         assertEquals(3L, result.getId());
         assertEquals("New", result.getName());
         assertEquals("New description", result.getDescription());
+        assertEquals("New summary", result.getSummary());
         verify(projectPersistencePort).save(existing);
     }
 }

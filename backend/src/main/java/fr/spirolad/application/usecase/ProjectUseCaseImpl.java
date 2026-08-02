@@ -42,6 +42,7 @@ public class ProjectUseCaseImpl implements ProjectUseCase {
         Project existingProject = ensureProjectExists(id);
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
+        existingProject.setSummary(project.getSummary());
         existingProject.setLink(project.getLink());
         existingProject.setScreenshots(project.getScreenshots());
         existingProject.setTechnologies(project.getTechnologies());

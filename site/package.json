@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-site",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@astrojs/node": "^9.0.0",
+    "astro": "^5.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  }
+}
+
+

@@ -30,6 +30,7 @@ export class ProjectsPage implements OnInit {
 
   protected readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
+    summary: ['', Validators.required],
     description: [''],
     link: [''],
     screenshotsText: [''],
@@ -60,6 +61,7 @@ export class ProjectsPage implements OnInit {
     this.projectId.set(item.id ?? null);
     this.form.patchValue({
       name: item.name ?? '',
+      summary: item.summary ?? '',
       description: item.description ?? '',
       link: item.link ?? '',
       screenshotsText: textFromLines(item.screenshots),
@@ -81,6 +83,7 @@ export class ProjectsPage implements OnInit {
 
     const payload: ProjectUploadRequest = {
       name: this.form.value.name ?? '',
+      summary: this.form.value.summary ?? '',
       description: this.form.value.description || undefined,
       link: this.form.value.link || undefined,
       screenshots: linesFromText(this.form.value.screenshotsText),
@@ -134,6 +137,10 @@ export class ProjectsPage implements OnInit {
     const base = value.includes(',') ? value.split(',')[1] ?? '' : value;
     const mime = mimeTypeFromBase64(base);
     return `data:${mime};base64,${base}`;
+  }
+
+  protected projectSummary(item: ProjectResponse): string {
+    return item.summary || item.description || 'Aucun résumé';
   }
 
   protected removeScreenshot(screenshot: string): void {

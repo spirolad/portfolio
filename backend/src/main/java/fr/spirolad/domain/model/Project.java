@@ -9,15 +9,17 @@ public class Project {
 
     private Long id;
     private String name;
+    private String summary;
     private String description;
     private String link;
     private List<String> screenshots = new ArrayList<>();
     private List<String> technologies = new ArrayList<>();
 
-    public Project(Long id, String name, String description, String link, List<String> screenshots, List<String> technologies) {
+    public Project(Long id, String name, String description, String summary, String link, List<String> screenshots, List<String> technologies) {
         this.id = id;
         setName(name);
         setDescription(description);
+        setSummary(summary);
         setLink(link);
         setScreenshots(screenshots);
         setTechnologies(technologies);
@@ -47,6 +49,14 @@ public class Project {
             throw new ProjectInvalideException("Project description is required");
         }
         this.description = description;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary == null || summary.isBlank() ? this.description : summary;
     }
 
     public String getLink() {
