@@ -13,53 +13,66 @@ const technologies = project.technologies ?? [];
 ---
 
 <dialog id={modalId} class="project-modal" aria-labelledby={titleId}>
-  <div class="project-modal__surface">
-    <div class="project-modal__header">
+  <div class="modal-scroll">
+    <div class="modal-header">
       <div>
-        <p class="project-modal__eyebrow">Projet en détail</p>
-        <h3 id={titleId}>{project.name}</h3>
+        <span class="section-eyebrow">Fiche Projet</span>
+        <h3 id={titleId} class="modal-title">{project.name}</h3>
       </div>
       <form method="dialog">
-        <button class="project-modal__close" type="submit" aria-label="Fermer la popup">×</button>
+        <button class="modal-close-btn" type="submit" aria-label="Fermer la fenêtre">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </form>
     </div>
 
-    <p class="project-modal__summary">{summary}</p>
-    <p class="project-modal__description">{project.description ?? 'Aucune description disponible.'}</p>
+    {summary && <p class="modal-summary">{summary}</p>}
+    {project.description && <p class="modal-description">{project.description}</p>}
 
-    <section class="project-modal__section">
-      <h4>Captures d’écran</h4>
-      {screenshots.length > 0 ? (
-        <div class="project-modal__gallery">
-          {screenshots.map((screenshot, screenshotIndex) => {
+    {screenshots.length > 0 && (
+      <div class="modal-section">
+        <h4 class="modal-section-title">Captures d'écran</h4>
+        <div class="modal-gallery">
+          {screenshots.map((screenshot, idx) => {
             const src = toImageSrc(screenshot);
-            return src ? <img src={src} alt={`${project.name} - capture ${screenshotIndex + 1}`} /> : null;
+            return src ? (
+              <img
+                src={src}
+                alt={`${project.name} - capture ${idx + 1}`}
+                class="modal-screenshot"
+                loading="lazy"
+              />
+            ) : null;
           })}
         </div>
-      ) : (
-        <p class="meta">Aucune capture d’écran disponible.</p>
-      )}
-    </section>
+      </div>
+    )}
 
-    <section class="project-modal__section">
-      <h4>Technologies</h4>
-      {technologies.length > 0 ? (
-        <div class="skill-list">
-          {technologies.map((tech) => <span class="chip">{tech}</span>)}
+    {technologies.length > 0 && (
+      <div class="modal-section">
+        <h4 class="modal-section-title">Technologies & Outils</h4>
+        <div class="skill-chips">
+          {technologies.map((tech) => (
+            <span class="chip">{tech}</span>
+          ))}
         </div>
-      ) : (
-        <p class="meta">Aucune technologie renseignée.</p>
-      )}
-    </section>
+      </div>
+    )}
 
-    <div class="project-modal__footer">
+    <div class="modal-footer">
       {project.link ? (
-        <a class="button primary" href={project.link} target="_blank" rel="noreferrer">Visiter le projet ↗</a>
+        <a class="button primary" href={project.link} target="_blank" rel="noopener noreferrer">
+          <span>Découvrir le projet</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17l9.2-9.2M17 17V7H7" />
+          </svg>
+        </a>
       ) : (
-        <span class="meta">Projet interne</span>
+        <span class="chip">Projet interne / Confidentiel</span>
       )}
     </div>
   </div>
 </dialog>
-
-

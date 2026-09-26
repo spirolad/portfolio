@@ -8,15 +8,28 @@ const { projects } = Astro.props as {
 };
 ---
 
-<section id="projets" class="section glass">
-  <h2>Projets</h2>
-  <div class="project-grid">
-    {projects.length > 0 ? projects.map((project, index) => {
-      const modalId = `project-modal-${project.id ?? index}`;
-      const summary = project.summary ?? project.description ?? 'Aucun résumé disponible.';
+<section id="projets" class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <span>// 02. CODEBASE & PROJECTS</span>
+    </div>
+    <h2 class="section-title">Réalisations & Systèmes</h2>
+    <p class="section-lead">Applications conçues, architectures logicielles déployées et projets open-source.</p>
+  </div>
 
-      return <ProjectCard project={project} modalId={modalId} summary={summary} />;
-    }) : <p class="meta">Aucun projet disponible.</p>}
+  <div class="project-grid">
+    {projects.length > 0 ? (
+      projects.map((project, index) => {
+        const modalId = `project-modal-${project.id ?? index}`;
+        const summary = project.summary ?? project.description ?? 'Aucun résumé disponible.';
+
+        return <ProjectCard project={project} modalId={modalId} summary={summary} />;
+      })
+    ) : (
+      <div class="skill-category-card" style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem;">
+        <p class="font-mono" style="margin: 0; color: var(--text-muted);">// Aucun projet publié pour le moment.</p>
+      </div>
+    )}
   </div>
 
   {projects.map((project, index) => {
@@ -26,38 +39,4 @@ const { projects } = Astro.props as {
 
     return <ProjectModal project={project} modalId={modalId} titleId={titleId} summary={summary} />;
   })}
-
-  <script is:inline>
-    const openModal = (id) => {
-      const dialog = document.getElementById(id);
-      if (dialog instanceof HTMLDialogElement) {
-        dialog.showModal();
-      }
-    };
-
-    document.querySelectorAll('[data-project-modal]').forEach((card) => {
-      const modalId = card.getAttribute('data-project-modal');
-      if (!modalId) return;
-
-      const trigger = () => openModal(modalId);
-      card.addEventListener('click', trigger);
-      card.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          trigger();
-        }
-      });
-    });
-
-    document.querySelectorAll('dialog.project-modal').forEach((dialog) => {
-      dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-          dialog.close();
-        }
-      });
-    });
-  </script>
 </section>
-
-
-

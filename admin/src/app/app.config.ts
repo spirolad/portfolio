@@ -7,6 +7,7 @@ import { Configuration } from './api/generated/configuration';
 import { BASE_PATH } from './api/generated/variables';
 import { routes } from './app.routes';
 import { authInterceptor } from './auth.interceptor';
+import { AuthSessionService } from './auth-session.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,10 +18,11 @@ export const appConfig: ApplicationConfig = {
     { provide: BASE_PATH, useValue: 'http://localhost:8080/api' },
     {
       provide: Configuration,
-      useFactory: () =>
+      deps: [AuthSessionService],
+      useFactory: (authSession: AuthSessionService) =>
         new Configuration({
           basePath: 'http://localhost:8080/api',
-          accessToken: () => localStorage.getItem('portfolio-admin-token') ?? ''
+          accessToken: () => authSession.getToken() ?? ''
         })
     }
   ]

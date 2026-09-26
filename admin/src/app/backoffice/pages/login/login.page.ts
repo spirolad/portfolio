@@ -10,6 +10,7 @@ import { finalize } from 'rxjs';
 import { AuthService } from '../../../api/generated/api/auth.service';
 import { LoginRequest } from '../../../api/generated/model/loginRequest';
 import { errorMessage } from '../../../admin-utils';
+import { AuthSessionService } from '../../../auth-session.service';
 @Component({
   selector: 'app-login-page',
   standalone: true,
@@ -18,6 +19,7 @@ import { errorMessage } from '../../../admin-utils';
 })
 export class LoginPage {
   private readonly authService = inject(AuthService);
+  private readonly authSession = inject(AuthSessionService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   protected readonly loading = signal(false);
@@ -40,7 +42,7 @@ export class LoginPage {
       .subscribe({
         next: (res) => {
           if (res.token) {
-            localStorage.setItem('portfolio-admin-token', res.token);
+            this.authSession.setToken(res.token);
             this.router.navigate(['/']);
           }
         },

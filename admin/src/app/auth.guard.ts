@@ -1,11 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthSessionService } from './auth-session.service';
+
 export const authGuard: CanActivateFn = () => {
+  const authSession = inject(AuthSessionService);
   const router = inject(Router);
-  const token = localStorage.getItem('portfolio-admin-token');
-  // Simple token presence check. An HTTP interceptor can log out if 401.
-  if (token) {
+
+  if (authSession.isAuthenticated()) {
     return true;
   }
+
+  authSession.clearToken();
   return router.createUrlTree(['/login']);
 };

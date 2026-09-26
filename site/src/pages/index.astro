@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectsSection from '../components/projects/ProjectsSection.astro';
-import { formatPeriod, getApiBaseUrl, getPortfolioSubtitle, toImageSrc, type Portfolio } from '../lib/portfolio';
+import { formatPeriod, getApiBaseUrl, toImageSrc, type Portfolio } from '../lib/portfolio';
 
 const apiUrl = `${getApiBaseUrl()}/api/portfolio`;
 let portfolio: Portfolio | null = null;
@@ -14,154 +14,387 @@ try {
   });
 
   if (!response.ok) {
-    errorMessage = `Le backend a répondu ${response.status}`;
+    errorMessage = `API Status: ${response.status}`;
   } else {
     portfolio = (await response.json()) as Portfolio;
   }
 } catch (error) {
-  errorMessage = error instanceof Error ? error.message : 'Impossible de charger le portfolio.';
+  errorMessage = error instanceof Error ? error.message : 'Connexion API impossible.';
 }
 
 const profile = portfolio?.generalInfo;
 const heroPhoto = toImageSrc(profile?.photo);
 const projects = portfolio?.projects ?? [];
-const projectCount = portfolio?.projects?.length ?? 0;
+const projectCount = projects.length;
 const skillCount = portfolio?.skills?.length ?? 0;
 const experienceCount = portfolio?.experiences?.length ?? 0;
+
+const userNameSlug = profile?.name ? profile.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'dev';
 ---
 
-<BaseLayout title={`${profile?.name ?? 'Portfolio'} — Présentation`} description={`Portfolio de ${profile?.name ?? 'mon profil'} : projets, compétences et expériences.`}>
+<BaseLayout
+  title={`${profile?.name ?? 'Portfolio'} — Ingénieur Logiciel`}
+  description={`Portfolio et architecture logicielle de ${profile?.name ?? 'mon profil'} : systèmes, réalisations, parcours et stack technique.`}
+>
+  {/* Floating Engineer Dock (Navigation) */}
+  <header class="engineer-dock-container">
+    <nav class="engineer-dock" aria-label="Navigation principale">
+      <a href="#" class="dock-brand" title="Retour au début">
+        <span class="dock-prompt">~/</span>
+        <span>{userNameSlug}</span>
+        <span class="dock-cursor" aria-hidden="true"></span>
+      </a>
+
+      <div class="dock-divider" aria-hidden="true"></div>
+
+      <ul class="dock-nav">
+        {experienceCount > 0 && (
+          <li>
+            <a href="#experiences" class="dock-nav-item" data-nav-target="experiences">
+              <span>Parcours</span>
+              <kbd class="dock-kbd">1</kbd>
+            </a>
+          </li>
+        )}
+        {projectCount > 0 && (
+          <li>
+            <a href="#projets" class="dock-nav-item" data-nav-target="projets">
+              <span>Projets</span>
+              <kbd class="dock-kbd">2</kbd>
+            </a>
+          </li>
+        )}
+        {skillCount > 0 && (
+          <li>
+            <a href="#competences" class="dock-nav-item" data-nav-target="competences">
+              <span>Stack</span>
+              <kbd class="dock-kbd">3</kbd>
+            </a>
+          </li>
+        )}
+        {portfolio?.educations && portfolio.educations.length > 0 && (
+          <li>
+            <a href="#formation" class="dock-nav-item" data-nav-target="formation">
+              <span>Cursus</span>
+              <kbd class="dock-kbd">4</kbd>
+            </a>
+          </li>
+        )}
+      </ul>
+
+      <div class="dock-divider" aria-hidden="true"></div>
+
+      <div class="dock-status" title="Système opérationnel">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>200 OK</span>
+      </div>
+
+      {profile?.email && (
+        <a href={`mailto:${profile.email}`} class="dock-cta" title="Envoyer un message (Raccourci C)">
+          <span>Contact</span>
+          <kbd class="dock-kbd" style="background: rgba(0,0,0,0.15); border-color: rgba(0,0,0,0.2); color: #080a0e;">C</kbd>
+        </a>
+      )}
+    </nav>
+  </header>
+
   <main class="shell">
     <div class="container">
       {portfolio ? (
         <>
-          <section class="hero glass">
+          {/* Hero Section */}
+          <section id="apropos" class="hero">
             <div class="hero-grid">
-              <div>
-                <span class="badge">Portfolio · Vue publique</span>
-                <h1 class="hero-title">{profile?.name}</h1>
+              <div class="hero-content">
+                <div class="system-status-row">
+                  <div class="badge badge-system">
+                    <span class="pulse-dot" aria-hidden="true"></span>
+                    <span>SYS_ONLINE · OPEN_TO_PROJECTS</span>
+                  </div>
+                  <span class="font-mono" style="font-size: 0.78rem; color: var(--text-muted);">commit: main/HEAD</span>
+                </div>
+
+                <div>
+                  <h1 class="hero-title">{profile?.name}</h1>
+                  <div class="hero-role-code">
+                    <span class="role-tag">&lt;Engineer&nbsp;/&gt;</span>
+                    <span>·</span>
+                    <span>{profile?.currentPosition}</span>
+                  </div>
+                </div>
+
                 <p class="hero-copy">
-                  {profile?.currentPosition}. Je construis des expériences web propres, lisibles et orientées impact.
-                  Cette page présente mon parcours, mes projets et mes compétences à partir du backend en temps réel.
+                  Conception d'architectures logicielles résilientes, d'APIs haute performance et d'interfaces web ultra-réactives.
+                  Focalisé sur la simplicité du code, la robustesse technique et l'impact mesurable.
                 </p>
 
                 <div class="hero-actions">
-                  <a class="button primary" href={`mailto:${profile?.email}`}>Me contacter</a>
-                  <button class="button secondary" type="button" data-scroll-to-projects>Voir les projets</button>
+                  {profile?.email && (
+                    <a class="button primary" href={`mailto:${profile.email}`}>
+                      <span class="font-mono">&gt;</span>
+                      <span>Prendre contact</span>
+                    </a>
+                  )}
+                  {projectCount > 0 && (
+                    <button class="button secondary" type="button" data-scroll-to-projects>
+                      <span>Explorer les projets</span>
+                      <span class="font-mono" aria-hidden="true">↓</span>
+                    </button>
+                  )}
+                  {profile?.email && (
+                    <button
+                      class="copy-pill"
+                      type="button"
+                      data-copy-email={profile.email}
+                      title="Copier l'adresse email"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                      </svg>
+                      <span class="copy-text">{profile.email}</span>
+                    </button>
+                  )}
                 </div>
 
-                <div class="stat-grid">
-                  <div class="stat">
-                    <strong>{experienceCount}</strong>
-                    <span>expérience{experienceCount > 1 ? 's' : ''}</span>
+                <div class="telemetry-row">
+                  <div class="telemetry-item">
+                    <span class="telemetry-val">{experienceCount}</span>
+                    <span class="telemetry-lbl">Missions & Postes</span>
                   </div>
-                  <div class="stat">
-                    <strong>{projectCount}</strong>
-                    <span>projet{projectCount > 1 ? 's' : ''}</span>
+                  <div class="telemetry-item">
+                    <span class="telemetry-val">{projectCount}</span>
+                    <span class="telemetry-lbl">Projets Livrés</span>
                   </div>
-                  <div class="stat">
-                    <strong>{skillCount}</strong>
-                    <span>compétence{skillCount > 1 ? 's' : ''}</span>
+                  <div class="telemetry-item">
+                    <span class="telemetry-val">{skillCount}</span>
+                    <span class="telemetry-lbl">Technologies Actives</span>
                   </div>
                 </div>
               </div>
 
-              <aside class="hero-panel">
-                {heroPhoto ? (
-                  <img class="avatar" src={heroPhoto} alt={profile?.name ?? 'Photo de profil'} />
-                ) : (
-                  <div class="avatar" style="display:grid;place-items:center;font-size:1.2rem;color:var(--muted);">Photo à venir</div>
-                )}
-                <div class="panel-body">
-                  <div class="meta">{profile?.email}</div>
-                  <h2 style="margin:0.4rem 0 0.35rem;">{profile?.currentPosition}</h2>
-                  <p class="meta" style="line-height:1.65;margin:0;">{getPortfolioSubtitle(portfolio)}</p>
-                </div>
-              </aside>
-            </div>
-          </section>
-
-          <section id="experience" class="section glass">
-            <h2>Expériences</h2>
-            <div class="timeline">
-              {portfolio.experiences.length > 0 ? portfolio.experiences.map((exp) => (
-                <article class="timeline-item">
-                  <div class="topline">
-                    <strong>{exp.company}</strong>
-                    <span>{formatPeriod(exp.startDate, exp.endDate)}</span>
+              {/* Terminal Specs HUD Card */}
+              <div class="terminal-spec-card">
+                <div class="terminal-header">
+                  <div class="terminal-dots">
+                    <span class="t-dot red"></span>
+                    <span class="t-dot yellow"></span>
+                    <span class="t-dot green"></span>
                   </div>
-                  <h3>{exp.position}</h3>
-                  <ul>
-                    {(exp.mission ?? []).map((mission) => <li>{mission}</li>)}
-                  </ul>
-                </article>
-              )) : <p class="meta">Aucune expérience disponible.</p>}
+                  <span class="terminal-title">~/specs/profile.json</span>
+                  <span class="font-mono" style="font-size: 0.7rem; color: var(--brand-green);">node.js v22</span>
+                </div>
+
+                <div class="terminal-body">
+                  <div class="engineer-badge-row">
+                    <div class="avatar-hud-wrap">
+                      {heroPhoto ? (
+                        <img class="avatar-hud" src={heroPhoto} alt={profile?.name ?? 'Photo de profil'} />
+                      ) : (
+                        <div class="avatar-placeholder-hud">
+                          <span>{profile?.name ? profile.name.slice(0, 2).toUpperCase() : 'DEV'}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div class="badge-info-col">
+                      <span class="badge-name">{profile?.name}</span>
+                      <span class="badge-title">// {profile?.currentPosition}</span>
+                      <span class="badge-location">📍 Paris, France · Remote / Hybrid</span>
+                    </div>
+                  </div>
+
+                  <pre class="terminal-code-block"><code><span class="code-key">&#123;</span>
+  <span class="code-key">"engineering"</span>: <span class="code-str">"Full-Stack & Systems"</span>,
+  <span class="code-key">"backend"</span>: <span class="code-str">"Quarkus · Java · C++"</span>,
+  <span class="code-key">"frontend"</span>: <span class="code-str">"Angular · Astro · TypeScript"</span>,
+  <span class="code-key">"paradigm"</span>: <span class="code-str">"Clean Code & Hexagonal"</span>,
+  <span class="code-key">"status"</span>: <span class="code-val">"available_for_hire"</span>
+<span class="code-key">&#125;</span></code></pre>
+                </div>
+              </div>
             </div>
           </section>
 
+          {/* Section Expériences (Engineering Logs) */}
+          {portfolio.experiences.length > 0 && (
+            <section id="experiences" class="section">
+              <div class="section-header">
+                <div class="section-eyebrow">
+                  <span>// 01. TIMELINE & CONTRIBUTIONS</span>
+                </div>
+                <h2 class="section-title">Parcours & Missions</h2>
+                <p class="section-lead">Historique des responsabilités d'ingénierie et des projets conduits en entreprise.</p>
+              </div>
+
+              <div class="timeline-list">
+                {portfolio.experiences.map((exp, index) => (
+                  <article class="timeline-item">
+                    <div class="timeline-header">
+                      <div class="timeline-company-row">
+                        <span class="timeline-company">{exp.company}</span>
+                        <span class="timeline-commit-badge">commit #{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                      <span class="timeline-period">{formatPeriod(exp.startDate, exp.endDate)}</span>
+                    </div>
+                    <div class="timeline-role font-mono">// {exp.position}</div>
+                    {exp.mission && exp.mission.length > 0 && (
+                      <ul class="timeline-missions">
+                        {exp.mission.map((item) => <li>{item}</li>)}
+                      </ul>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Section Projets */}
           <ProjectsSection projects={projects} />
 
-          <section id="competences" class="section glass">
-            <h2>Compétences</h2>
-            <div class="skill-columns">
-              {Array.from(new Map(portfolio.skills.map((skill) => [skill.category.name, [] as string[]]))).map(([categoryName]) => {
-                const skills = portfolio.skills.filter((skill) => skill.category.name === categoryName).map((skill) => skill.name);
-                return (
-                  <article class="skill-group">
-                    <div class="topline">
-                      <strong>{categoryName}</strong>
-                      <span>{skills.length}</span>
+          {/* Section Compétences (Tech Matrix) */}
+          {portfolio.skills.length > 0 && (
+            <section id="competences" class="section">
+              <div class="section-header">
+                <div class="section-eyebrow">
+                  <span>// 03. TECH STACK & EXPERTISE</span>
+                </div>
+                <h2 class="section-title">Matrice Technique</h2>
+                <p class="section-lead">Langages, frameworks, architectures et outils mobilisés au quotidien.</p>
+              </div>
+
+              <div class="skills-grid">
+                {Array.from(new Map(portfolio.skills.map((skill) => [skill.category.name, [] as string[]]))).map(([categoryName]) => {
+                  const skills = portfolio.skills.filter((skill) => skill.category.name === categoryName).map((skill) => skill.name);
+                  return (
+                    <article class="skill-category-card">
+                      <div class="skill-category-header">
+                        <h3 class="skill-category-title font-mono">
+                          <span style="color: var(--accent);">&gt;</span>
+                          <span>{categoryName}</span>
+                        </h3>
+                        <span class="skill-count-badge font-mono">{skills.length} modules</span>
+                      </div>
+                      <div class="skill-chips">
+                        {skills.map((skill) => (
+                          <span class="chip">
+                            <span class="chip-tag-dot" aria-hidden="true"></span>
+                            <span>{skill}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Section Formation */}
+          {portfolio.educations.length > 0 && (
+            <section id="formation" class="section">
+              <div class="section-header">
+                <div class="section-eyebrow">
+                  <span>// 04. ACADEMICS & DEGREES</span>
+                </div>
+                <h2 class="section-title">Cursus & Diplômes</h2>
+                <p class="section-lead">Parcours académique en ingénierie et formations certifiées.</p>
+              </div>
+
+              <div class="timeline-list">
+                {portfolio.educations.map((edu) => (
+                  <article class="timeline-item">
+                    <div class="timeline-header">
+                      <span class="timeline-company">{edu.institution}</span>
+                      <span class="timeline-period font-mono">{formatPeriod(edu.startDate, edu.endDate)}</span>
                     </div>
-                    <div class="skill-list">
-                      {skills.map((skill) => <span class="chip">{skill}</span>)}
-                    </div>
+                    <div class="timeline-role font-mono">// {edu.degree}</div>
                   </article>
-                );
-              })}
-            </div>
-          </section>
-
-          <section class="section glass">
-            <h2>Formation</h2>
-            <div class="timeline">
-              {portfolio.educations.length > 0 ? portfolio.educations.map((edu) => (
-                <article class="timeline-item">
-                  <div class="topline">
-                    <strong>{edu.institution}</strong>
-                    <span>{formatPeriod(edu.startDate, edu.endDate)}</span>
-                  </div>
-                  <h3>{edu.degree}</h3>
-                </article>
-              )) : <p class="meta">Aucune formation disponible.</p>}
-            </div>
-          </section>
-
-          <p class="footer-note container">Données chargées depuis <code>{apiUrl}</code>.</p>
+                ))}
+              </div>
+            </section>
+          )}
         </>
       ) : (
-        <section class="section glass" style="margin-top:2rem;">
-          <h2>Impossible de charger le portfolio</h2>
-          <p class="lead">{errorMessage}</p>
-          <p class="footer-note">Vérifie que le backend tourne bien sur `http://localhost:8080` ou configure `PORTFOLIO_API_URL`.</p>
+        <section class="section" style="padding: 5rem 0; text-align: center;">
+          <span class="badge badge-system" style="margin-bottom: 1rem;">STATUS: DISCONNECTED</span>
+          <h2 class="section-title" style="margin-bottom: 0.75rem;">Backend API indisponible</h2>
+          <p class="section-lead" style="margin: 0 auto 1.5rem; max-width: 48ch;">
+            {errorMessage || 'Impossible de charger le contenu depuis l’API backend.'}
+          </p>
+          <div class="badge font-mono" style="background: rgba(255,255,255,0.04); font-size: 0.8rem;">
+            ENDPOINT: {apiUrl}
+          </div>
         </section>
       )}
     </div>
   </main>
 
   <script is:inline>
-    const scrollToProjects = () => {
-      const target = document.getElementById('projets');
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
+    // Keyboard navigation (1, 2, 3, 4, C)
+    window.addEventListener('keydown', (e) => {
+      // Ignore if typing inside input, textarea, or dialog
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || document.querySelector('dialog[open]')) {
+        return;
+      }
 
-    document.querySelectorAll('[data-scroll-to-projects]').forEach((button) => {
-      button.addEventListener('click', scrollToProjects);
+      const key = e.key.toLowerCase();
+      if (key === '1') {
+        document.getElementById('experiences')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (key === '2') {
+        document.getElementById('projets')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (key === '3') {
+        document.getElementById('competences')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (key === '4') {
+        document.getElementById('formation')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (key === 'c') {
+        const contactBtn = document.querySelector('.dock-cta');
+        if (contactBtn instanceof HTMLAnchorElement) {
+          contactBtn.click();
+        }
+      }
     });
 
+    // Smooth scroll to projects button
+    document.querySelectorAll('[data-scroll-to-projects]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.getElementById('projets')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Copy email button with feedback
+    document.querySelectorAll('[data-copy-email]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const email = button.getAttribute('data-copy-email');
+        if (!email) return;
+        try {
+          await navigator.clipboard.writeText(email);
+          const label = button.querySelector('.copy-text');
+          if (label) {
+            const original = label.textContent;
+            label.textContent = '✓ Copié !';
+            setTimeout(() => {
+              label.textContent = original;
+            }, 2000);
+          }
+        } catch {
+          // Fallback if clipboard API restricted
+        }
+      });
+    });
+
+    // Project Modal management
     const openModal = (id) => {
       const dialog = document.getElementById(id);
       if (dialog instanceof HTMLDialogElement) {
         dialog.showModal();
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    const closeModal = (dialog) => {
+      if (dialog instanceof HTMLDialogElement) {
+        dialog.close();
+        document.body.style.overflow = '';
       }
     };
 
@@ -182,10 +415,13 @@ const experienceCount = portfolio?.experiences?.length ?? 0;
     document.querySelectorAll('dialog.project-modal').forEach((dialog) => {
       dialog.addEventListener('click', (event) => {
         if (event.target === dialog) {
-          dialog.close();
+          closeModal(dialog);
         }
+      });
+
+      dialog.addEventListener('close', () => {
+        document.body.style.overflow = '';
       });
     });
   </script>
 </BaseLayout>
-

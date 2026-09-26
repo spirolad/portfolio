@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthSessionService } from './auth-session.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
+  private readonly authSession = inject(AuthSessionService);
   protected readonly title = signal('Portfolio backoffice');
-  protected readonly token = signal(localStorage.getItem('portfolio-admin-token') ?? '');
-  protected readonly hasToken = computed(() => this.token().trim().length > 0);
+  protected readonly token = this.authSession.token;
+  protected readonly hasToken = this.authSession.isAuthenticated;
 
   protected readonly links = [
     { label: 'Profil', path: '/profile' },
@@ -20,11 +22,14 @@ export class App {
   ] as const;
 
   protected updateToken(value: string): void {
-    this.token.set(value);
-    localStorage.setItem('portfolio-admin-token', value);
+    if (value) {
+      this.authSession.setToken(value);
+    } else {
+      this.authSession.clearToken();
+    }
   }
 
   protected clearToken(): void {
-    this.updateToken('');
+    this.authSession.logout();
   }
 }
